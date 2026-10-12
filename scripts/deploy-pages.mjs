@@ -6,7 +6,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const root = join(import.meta.dirname, '..');
-const run = (cmd, args, cwd = root) => execFileSync(cmd, args, { cwd, stdio: 'inherit', shell: process.platform === 'win32' });
+// npm is a .cmd shim on Windows (needs a shell); git is run directly so arguments with spaces stay intact
+const run = (cmd, args, cwd = root) => execFileSync(cmd, args, { cwd, stdio: 'inherit', shell: cmd === 'npm' && process.platform === 'win32' });
 const out = (cmd, args) => execFileSync(cmd, args, { cwd: root }).toString().trim();
 
 run('npm', ['run', 'build']);
