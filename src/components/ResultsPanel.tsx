@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { DomainCheck, DomainStatus, Verdict } from '../domain/rules';
-import { SOURCES, citationLabel } from '../data/sources';
 import { useT } from '../lib/hooks';
 import { usePlanner } from '../store/plannerStore';
 import { serializeState } from '../domain/schema';
@@ -20,6 +19,9 @@ export function StatusBadge({ status }: { status: DomainStatus }) {
 export function ResultsPanel({ checks, verdict }: { checks: DomainCheck[]; verdict: Verdict }) {
   const { t } = useT();
   const headTone = verdict.counts.FAIL > 0 || verdict.headlineKey === 'verdict.invalidInput' ? 'FAIL' : verdict.counts.CAUTION > 0 || verdict.counts.NOT_VERIFIED > 0 ? 'NOT_VERIFIED' : 'PASS';
+  // items that need attention first; requirements met are collapsed into one row
+  const issues = checks.filter((c) => c.status !== 'PASS');
+  const passed = checks.filter((c) => c.status === 'PASS');
   return (
     <div className="panel-scroll" aria-live="polite">
       <section className="panel-section">
@@ -36,9 +38,23 @@ export function ResultsPanel({ checks, verdict }: { checks: DomainCheck[]; verdi
             )}
           </ul>
         </div>
-        <ol className="checks">
-          {checks.map((c) => <CheckRow key={c.id} check={c} />)}
-        </ol>
+        {issues.length > 0 && (
+          <ol className="checks">
+            {issues.map((c) => <CheckRow key={c.id} check={c} />)}
+          </ol>
+        )}
+        {passed.length > 0 && (
+          // open when there is nothing else to show; re-keyed so it re-opens/closes as the verdict changes
+          <details className="passed" key={issues.length === 0 ? 'all' : 'some'} open={issues.length === 0}>
+            <summary className="passed__summary">
+              <span className="passed__open">{t('results.passed', { n: passed.length })}</span>
+              <span className="passed__close">{t('results.passedHide')}</span>
+            </summary>
+            <ol className="checks checks--compact">
+              {passed.map((c) => <CheckRow key={c.id} check={c} compact />)}
+            </ol>
+          </details>
+        )}
       </section>
       <section className="panel-section">
         <ShareButton />
@@ -48,40 +64,27 @@ export function ResultsPanel({ checks, verdict }: { checks: DomainCheck[]; verdi
   );
 }
 
-function CheckRow({ check }: { check: DomainCheck }) {
+function CheckRow({ check, compact = false }: { check: DomainCheck; compact?: boolean }) {
   const { t } = useT();
-  const [open, setOpen] = useState(false);
-  const hasSource = (check.sources?.length ?? 0) > 0 || !!check.datumNote;
+  const msg = t(check.messageKey, check.params?.club ? { ...check.params, club: t(`club.${check.params.club}`) } : check.params);
+  if (compact) {
+    return (
+      <li className="check check--compact">
+        <span aria-hidden="true" className="check__tick">✓</span>
+        <span>
+          <span className="check__cat">{t(`cat.${check.category}`)}</span>
+          <span className="check__msg">{msg}</span>
+        </span>
+      </li>
+    );
+  }
   return (
     <li className={`check check--${check.status}`}>
       <div className="check__head">
         <span className="check__cat">{t(`cat.${check.category}`)}</span>
         <StatusBadge status={check.status} />
       </div>
-      <p className="check__msg">{t(check.messageKey, check.params?.club ? { ...check.params, club: t(`club.${check.params.club}`) } : check.params)}</p>
-      <div className="check__foot">
-        <span className="check__conf">{t(`source.confidence.${check.confidence}`)}</span>
-        {hasSource && (
-          <button type="button" className="linkish" aria-expanded={open} onClick={() => setOpen(!open)}>
-            {t('source.label')} {open ? '▴' : '▾'}
-          </button>
-        )}
-      </div>
-      {open && hasSource && (
-        <div className="check__sources">
-          {check.sources?.map((c, i) => (
-            <p key={i} className="src">
-              <span className="src__doc">{citationLabel(c)}</span>
-              {SOURCES[c.doc]?.docNumber && <span className="src__num"> · {SOURCES[c.doc]!.docNumber}</span>}
-              {c.quote && <q className="src__quote">{c.quote}</q>}
-              {c.diagram && <span className="src__diagram"> ({t('source.diagram')}: {c.diagram})</span>}
-            </p>
-          ))}
-          {check.datumNote && (
-            <p className="src src--datum"><strong>{t('source.datum')}:</strong> {check.datumNote}</p>
-          )}
-        </div>
-      )}
+      <p className="check__msg">{msg}</p>
     </li>
   );
 }

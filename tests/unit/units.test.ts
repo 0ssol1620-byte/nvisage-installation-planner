@@ -30,3 +30,17 @@ describe('units', () => {
     expect(mToIn(inToM(16))).toBeCloseTo(16, 12);
   });
 });
+
+describe('length input text', () => {
+  it('formats and parses feet-and-inches', async () => {
+    const { formatInputText, parseInputText, inToM: i2m } = await import('../../src/domain/units');
+    expect(formatInputText(4.5, 'imperial')).toBe(`14' 9.2"`);
+    expect(formatInputText(i2m(12), 'imperial')).toBe('12"');
+    expect(formatInputText(i2m(120), 'imperial')).toBe(`10'`);
+    for (const t of [`14' 9.2"`, `14'9.2`, '14 ft 9.2 in', '14′ 9.2″', '177.2']) expect(parseInputText(t, 'imperial')).toBeCloseTo(i2m(177.2), 3);
+    expect(parseInputText(`9.5"`, 'imperial')).toBeCloseTo(i2m(9.5), 3);
+    expect(parseInputText('abc', 'imperial')).toBeNaN();
+    expect(parseInputText('', 'metric')).toBeNaN();
+    expect(parseInputText('4.5', 'metric')).toBe(4.5);
+  });
+});

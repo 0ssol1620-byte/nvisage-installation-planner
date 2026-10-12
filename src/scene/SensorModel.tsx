@@ -1,14 +1,14 @@
 import { Component, Suspense, useLayoutEffect, useMemo, type ReactNode } from 'react';
-import { Edges, RoundedBox, useGLTF } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import type { Layout } from '../domain/layout';
 import type { ProductId } from '../data/specs/products';
 import { sensorModelUrl } from '../data/assets/manifest';
-import { SCENE } from './colors';
+import { N1Model, N2Model, NeoEModel } from './ProductModels';
 
 /**
- * Product model. Uses the private CAD preview only under the dev server; otherwise a
- * dimension-accurate envelope from the official size table (no unapproved geometry is shipped).
+ * Product model: the publishable model built from the published size and the product photos
+ * (ProductModels.tsx). The private CAD preview is only used on the dev server with `?cad=1`.
  */
 export function SensorModel({ layout, product, onModelKind }: { layout: Layout; product: ProductId; onModelKind?: (k: 'preview' | 'envelope') => void }) {
   const url = sensorModelUrl(product);
@@ -16,7 +16,7 @@ export function SensorModel({ layout, product, onModelKind }: { layout: Layout; 
   const position = isOverhead ? layout.sensorAnchor : layout.deviceAnchor;
   const rotationY = isOverhead ? layout.sensorRotationY : layout.deviceRotationY;
   const size = isOverhead ? layout.sensorBody.size : ([layout.deviceBody.size[2], layout.deviceBody.size[1], layout.deviceBody.size[0]] as const);
-  const envelope = <Envelope size={[size[0], size[1], size[2]]} hangs={isOverhead} onShow={() => onModelKind?.('envelope')} />;
+  const envelope = <ProductModel product={product} size={[size[0], size[1], size[2]]} onShow={() => onModelKind?.('envelope')} />;
 
   return (
     <group position={position} rotation-y={rotationY}>
@@ -50,14 +50,11 @@ function GlbModel({ url, onShow }: { url: string; onShow: () => void }) {
   return <primitive object={object} />;
 }
 
-function Envelope({ size, hangs, onShow }: { size: [number, number, number]; hangs: boolean; onShow: () => void }) {
+function ProductModel({ product, size, onShow }: { product: ProductId; size: [number, number, number]; onShow: () => void }) {
   useLayoutEffect(() => onShow(), [onShow]);
-  return (
-    <RoundedBox args={size} radius={Math.min(...size) * 0.12} smoothness={3} position={[0, hangs ? -size[1] / 2 : size[1] / 2, 0]} castShadow>
-      <meshStandardMaterial color="#2A3032" roughness={0.45} metalness={0.3} />
-      <Edges color={SCENE.brand} threshold={30} />
-    </RoundedBox>
-  );
+  if (product === 'N1') return <N1Model size={size} />;
+  if (product === 'N2') return <N2Model size={size} />;
+  return <NeoEModel size={size} />;
 }
 
 class ModelBoundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {

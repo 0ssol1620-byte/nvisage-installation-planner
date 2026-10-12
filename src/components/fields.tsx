@@ -1,6 +1,6 @@
 import { useEffect, useId, useState, type ReactNode } from 'react';
 import type { DisplayUnits } from '../domain/units';
-import { fromInputValue, inputUnitLabel, toInputValue } from '../domain/units';
+import { formatInputText, inputUnitLabel, parseInputText } from '../domain/units';
 import { useT } from '../lib/hooks';
 
 /** Unit-aware numeric input: canonical metres in/out, metres or inches on screen, mm-rounded. */
@@ -13,17 +13,16 @@ export function LengthField({ label, valueM, onChange, rangeM, units, stepM = 0.
   stepM?: number;
   hint?: string;
 }) {
-  const { t, fmt } = useT();
+  const { t } = useT();
   const id = useId();
-  const [text, setText] = useState(() => String(toInputValue(valueM, units)));
+  const [text, setText] = useState(() => formatInputText(valueM, units));
   const [focused, setFocused] = useState(false);
   useEffect(() => {
-    if (!focused) setText(String(toInputValue(valueM, units)));
+    if (!focused) setText(formatInputText(valueM, units));
   }, [valueM, units, focused]);
 
-  const parsed = Number(text.replace(',', '.'));
-  const valid = text.trim() !== '' && Number.isFinite(parsed);
-  const meters = valid ? fromInputValue(parsed, units) : NaN;
+  const meters = parseInputText(text, units);
+  const valid = Number.isFinite(meters);
   const inRange = valid && meters >= rangeM[0] - 1e-9 && meters <= rangeM[1] + 1e-9;
   const error = !valid ? t('field.invalid_number') : !inRange ? t('field.out_of_range', { min: rangeM[0], max: rangeM[1] }) : null;
 
@@ -33,9 +32,11 @@ export function LengthField({ label, valueM, onChange, rangeM, units, stepM = 0.
   };
   const step = (dir: 1 | -1) => {
     const base = Number.isFinite(meters) ? meters : valueM;
-    const next = Math.round(Math.min(rangeM[1], Math.max(rangeM[0], base + dir * stepM)) * 1000) / 1000;
+    // imperial steps by whole inches so the text stays readable
+    const inc = units === 'imperial' ? 0.0254 * Math.max(1, Math.round(stepM / 0.0254)) : stepM;
+    const next = Math.round(Math.min(rangeM[1], Math.max(rangeM[0], base + dir * inc)) * 1000) / 1000;
     // keep the visible text in sync while the field has focus (arrow keys repeat from the new value)
-    setText(String(toInputValue(next, units)));
+    setText(formatInputText(next, units));
     commit(next);
   };
 
@@ -47,7 +48,7 @@ export function LengthField({ label, valueM, onChange, rangeM, units, stepM = 0.
         <input
           id={id}
           className="field__input tabular"
-          inputMode="decimal"
+          inputMode={units === 'metric' ? 'decimal' : 'text'}
           value={text}
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-err` : hint ? `${id}-hint` : undefined}
@@ -58,11 +59,8 @@ export function LengthField({ label, valueM, onChange, rangeM, units, stepM = 0.
           }}
           onChange={(e) => {
             setText(e.target.value);
-            const v = Number(e.target.value.replace(',', '.'));
-            if (e.target.value.trim() !== '' && Number.isFinite(v)) {
-              const m = fromInputValue(v, units);
-              if (m >= rangeM[0] && m <= rangeM[1]) onChange(m);
-            }
+            const m = parseInputText(e.target.value, units);
+            if (Number.isFinite(m) && m >= rangeM[0] && m <= rangeM[1]) onChange(m);
           }}
           onKeyDown={(e) => {
             if (e.key === 'ArrowUp') { e.preventDefault(); step(1); }
@@ -76,8 +74,6 @@ export function LengthField({ label, valueM, onChange, rangeM, units, stepM = 0.
         <p id={`${id}-err`} className="field__error" role="alert">{error}</p>
       ) : hint ? (
         <p id={`${id}-hint`} className="field__hint">{hint}</p>
-      ) : units === 'imperial' ? (
-        <p className="field__hint field__hint--value tabular" aria-hidden="true">{fmt.len(valueM)}</p>
       ) : null}
     </div>
   );

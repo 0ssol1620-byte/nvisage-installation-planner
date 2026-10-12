@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { PRODUCTS, PRODUCT_ORDER, isOverhead } from '../data/specs/products';
-import type { EnclosureFamily, ScreenMaterialId } from '../data/carls';
-import { ENCLOSURES, MATS, MAT_INSERT_IN, PROJECTORS, SCREEN_MATERIALS, enclosureById, matById, projectorById } from '../data/carls';
+import type { EnclosureFamily } from '../data/carls';
+import { ENCLOSURES, MATS, PROJECTORS, enclosureById, matById, projectorById } from '../data/carls';
 import { LIMITS } from '../domain/schema';
 import { resolveEquipment } from '../domain/equipment';
 import { enclosureForFamily } from '../domain/packages';
@@ -61,12 +61,16 @@ export function InputsPanel() {
   const mat = s.mat.model === 'custom' ? null : matById(s.mat.model);
   const inch = (v: number) => fmt.inch(v);
   // published inches first, converted value on its own line
-  const both = (wIn: number, hIn: number, extra = '') => (
+  // the chosen units first; in metric the catalog inches follow underneath
+  const metric = u === 'metric';
+  const dual = (main: string, sub: string) => (
     <>
-      {`${inch(wIn)} × ${inch(hIn)}${extra}`}
-      <span className="equip-card__sub">{`${fmt.len(inToM(wIn))} × ${fmt.len(inToM(hIn))}`}</span>
+      {metric ? main : sub}
+      {metric && <span className="equip-card__sub">{sub}</span>}
     </>
   );
+  const both = (wIn: number, hIn: number) => dual(`${fmt.len(inToM(wIn))} × ${fmt.len(inToM(hIn))}`, `${inch(wIn)} × ${inch(hIn)}`);
+  const one = (vIn: number) => dual(fmt.len(inToM(vIn)), inch(vIn));
 
   return (
     <div className="panel-scroll">
@@ -149,8 +153,8 @@ export function InputsPanel() {
             {mat ? (
               <EquipCard
                 rows={[
-                  { k: t('mat.size'), v: both(mat.wIn, mat.dIn, ` · ${inch(mat.hIn)}`) },
-                  { k: t('mat.insert'), v: `${inch(MAT_INSERT_IN.wide)} × ${inch(MAT_INSERT_IN.long)}` },
+                  { k: t('mat.size'), v: both(mat.wIn, mat.dIn) },
+                  { k: t('mat.height'), v: one(mat.hIn) },
                 ]}
               />
             ) : (
@@ -188,18 +192,12 @@ export function InputsPanel() {
                 groups={[{ options: enc.depthsIn.map((d, i) => ({ value: String(d), label: `${enc.depthListingFt[i]}′ · ${inch(d)}` })) }]}
               />
             </div>
-            <SelectField
-              label={t('field.material')}
-              value={s.enclosure.material}
-              onChange={(v) => a.setEnclosure({ material: v as ScreenMaterialId })}
-              groups={[{ options: (Object.keys(SCREEN_MATERIALS) as ScreenMaterialId[]).map((m) => ({ value: m, label: SCREEN_MATERIALS[m].name })) }]}
-            />
             <EquipCard
               rows={[
                 { k: t('enc.outer'), v: both(enc.outerWIn, enc.outerHIn) },
                 { k: t('enc.screen'), v: both(enc.screenWIn, enc.screenHIn) },
-                ...(enc.arcWIn ? [{ k: t('enc.arc'), v: <>{inch(enc.arcWIn)}<span className="equip-card__sub">{fmt.len(inToM(enc.arcWIn))}</span></> }] : []),
-                { k: t('enc.footprint'), v: <>{inch(Math.round((s.enclosure.depthIn + enc.rearFittingIn) * 1000) / 1000)}<span className="equip-card__sub">{`${inch(s.enclosure.depthIn)} + ${inch(enc.rearFittingIn)} · ${fmt.len(inToM(s.enclosure.depthIn + enc.rearFittingIn))}`}</span></> },
+                ...(enc.arcWIn ? [{ k: t('enc.arc'), v: one(enc.arcWIn) }] : []),
+                { k: t('enc.footprint'), v: one(Math.round((s.enclosure.depthIn + enc.rearFittingIn) * 1000) / 1000) },
               ]}
             />
             <LengthField label={t('field.screenSetback')} valueM={s.screen.setbackM} rangeM={LIMITS.screenSetbackM} units={u} stepM={0.01} onChange={(setbackM) => a.setScreen({ setbackM })} />
@@ -226,7 +224,7 @@ export function InputsPanel() {
           value={s.projector.model}
           onChange={a.selectProjector}
           groups={[
-            { options: PROJECTORS.map((p) => ({ value: p.id, label: `${p.name} · ${p.resolution}` })) },
+            { options: PROJECTORS.map((p) => ({ value: p.id, label: `${p.name} · ${p.resolution === '3840 × 2160' ? '4K' : 'Full HD'}` })) },
             { options: [{ value: 'none', label: t('field.projectorNone') }] },
           ]}
         />
@@ -248,7 +246,6 @@ export function InputsPanel() {
                       { k: t('proj.drop'), v: fmt.len(Math.max(0, eq.projector.dropM)) },
                     ]
                   : []),
-                { k: t('proj.body'), v: <>{`${proj.sizeIn.w} × ${proj.sizeIn.d} × ${proj.sizeIn.h}″`}<span className="equip-card__sub">{`${proj.weightLb} lb`}</span></> },
               ]}
             />
           </>

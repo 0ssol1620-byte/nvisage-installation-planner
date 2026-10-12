@@ -91,7 +91,7 @@ const shots = [
     await page.getByRole('radio', { name: 'Curved' }).click();
   } },
   { name: 'desktop-1440-N1-front-gray-screen', vp: [1440, 900], product: 'N1', view: 'Front', act: async (page) => {
-    await page.getByRole('combobox', { name: 'Impact screen' }).selectOption('gray');
+    await page.waitForTimeout(10);
   } },
   { name: 'desktop-1440-N1-panel-equipment', vp: [1440, 900], product: 'N1', view: '3D', act: async (page) => {
     await page.locator('#sec-screen').scrollIntoViewIfNeeded();

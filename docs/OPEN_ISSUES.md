@@ -10,7 +10,7 @@
 | O-05 | Approve public CAD shells (RG-02 checklist) and confirm hardware revisions | Mechanical / security | CAD_PUBLICATION_CHECKLIST |
 | O-06 | Optional: licensed realistic rigged golfer to replace the procedural mannequin (same IK data). No purchase made. | Marketing / legal | REFERENCE_COMPARISON §2 |
 | O-08 | Logo use in the public planner (MURLIE screenshot selected by the owner 2026-10-12, DL-27) | Marketing | DL-27 |
-| O-09 | Production build still shows dimension-accurate boxes for N1/N2/NEO-E (product GLBs are dev-only until RG-02 CAD publication approval). Approve a publishable exterior model for the official site. | Mechanical/security | DL-06 |
+| O-09 | Product models are publishable stand-ins built from published sizes and photos (DL-33). Replace with approved exterior models when RG-02 CAD publication is approved. | Mechanical/security | DL-33 |
 | O-10 | Robots `noindex` meta is still set in `index.html`; remove it when the planner goes live on the official site. | Web ops | DL-28 |
 | O-07 | Brand-guide confirmation for logo use and the dark UI theme | Marketing | DL-15 |
 
@@ -27,4 +27,3 @@
 | E-08 | Zoom 125/200 %, tablet, screen-reader and 30-min memory QA | §20.3 |
 | E-09 | Product taglines / spec card labels in KO | i18n |
 | E-10 | Close N1 camera window, separate lenses, add logos/LED textures | §8.4 |
-| O-11 | Imperial input shows decimal inches (e.g. 177.17 in); a feet-and-inches entry field would read better for US customers. | Product | DL-30 |

@@ -43,12 +43,20 @@ const check = (name, ok, detail = '') => results.push(`${ok ? 'PASS' : 'FAIL'}  
   // no mention of the reseller anywhere in the UI
   const txt = await page.evaluate(() => document.body.innerText + [...document.querySelectorAll('option')].map((o) => o.textContent).join(' '));
   check('no "Carl" in UI text', !/carl/i.test(txt));
+  // customer view shows results, not document references (DL-32)
+  await page.locator('details.passed summary').click();
+  const all = await page.evaluate(() => document.body.innerText);
+  const refs = all.match(/manual|매뉴얼|Rev\.\s?\d|p\.\d|specification|사양서|drawing|도면 기준|Source|출처/gi);
+  check('no document references in the UI', !refs, refs ? refs.slice(0, 5).join(', ') : '');
   await ctx.close();
 }
 {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true });
   const page = await ctx.newPage();
   await page.goto(base + '#s=garbage', { waitUntil: 'networkidle' });
+  const allKo = await page.evaluate(() => document.body.innerText);
+  const refsKo = allKo.match(/매뉴얼|사양서|출처|도면 기준/g);
+  check('KO: no document references in the UI', !refsKo, refsKo ? refsKo.join(', ') : '');
   const notice = await page.locator('.notice').innerText().catch(() => '');
   check('invalid share link in KO browser → Korean UI', /[가-힣]/.test(notice), notice.slice(0, 40));
   await ctx.close();

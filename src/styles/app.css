@@ -309,3 +309,18 @@ html[lang='ko'] body { word-break: keep-all; overflow-wrap: anywhere; }
   .panel-section .segmented__opt { padding-left: 4px; padding-right: 4px; }
   .segmented--lg .segmented__sub { font-size: 9.5px; }
 }
+
+/* requirements met: one collapsible row */
+.passed { margin-top: 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); }
+.passed__summary { list-style: none; cursor: pointer; padding: 10px 12px; font-size: 12.5px; font-weight: 600; color: var(--pass); display: flex; justify-content: space-between; align-items: center; }
+.passed__summary::-webkit-details-marker { display: none; }
+.passed__summary::after { content: '▾'; color: var(--text-3); }
+.passed[open] .passed__summary::after { content: '▴'; }
+.passed__close { display: none; }
+.passed[open] .passed__open { display: none; }
+.passed[open] .passed__close { display: inline; }
+.checks--compact { gap: 0; padding: 0 12px 6px; }
+.check--compact { display: flex; gap: 8px; border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 8px 0; background: transparent; }
+.check--compact .check__tick { color: var(--pass); font-size: 12px; line-height: 1.5; }
+.check--compact .check__cat { display: block; font-size: 11.5px; color: var(--text-3); font-weight: 600; }
+.check--compact .check__msg { display: block; margin: 1px 0 0; font-size: 12.5px; }

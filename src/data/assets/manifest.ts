@@ -70,6 +70,8 @@ export function sensorModelUrl(id: ProductId): string | null {
   const a = SENSOR_ASSETS[id];
   if (a.publicApproved && a.publicUrl) return a.publicUrl;
   // Dead code in production builds (__PRIVATE_PREVIEW__ === false), so the dev path is never bundled.
-  if (__PRIVATE_PREVIEW__) return `/__private-preview/${a.assetId}.preview.glb`;
+  if (__PRIVATE_PREVIEW__ && typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('cad')) {
+    return `/__private-preview/${a.assetId}.preview.glb`;
+  }
   return null;
 }

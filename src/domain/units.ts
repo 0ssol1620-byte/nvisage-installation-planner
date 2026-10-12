@@ -59,4 +59,33 @@ export function fromInputValue(value: number, units: DisplayUnits): number {
   return roundToMm(units === 'metric' ? value : inToM(value));
 }
 
-export const inputUnitLabel = (units: DisplayUnits): string => (units === 'metric' ? 'm' : 'in');
+/** Unit shown after the input; imperial entries carry their own ′ ″ marks. */
+export const inputUnitLabel = (units: DisplayUnits): string => (units === 'metric' ? 'm' : '');
+
+/** Text for a length input: metres, or feet-and-inches (`14' 9.2"`; under 2 ft: `9.5"`). */
+export function formatInputText(meters: number, units: DisplayUnits): string {
+  if (units === 'metric') return String(toInputValue(meters, units));
+  const sign = meters < 0 ? '-' : '';
+  const totalIn = Math.round(mToIn(Math.abs(meters)) * 10) / 10;
+  if (totalIn < 24) return `${sign}${trimNumber(totalIn)}"`;
+  const ft = Math.floor(totalIn / INCHES_PER_FOOT);
+  const inch = Math.round((totalIn - ft * INCHES_PER_FOOT) * 10) / 10;
+  return inch ? `${sign}${ft}' ${trimNumber(inch)}"` : `${sign}${ft}'`;
+}
+
+/**
+ * Parse a length input into metres (mm-rounded), NaN if unreadable.
+ * Imperial accepts `14' 9.2"`, `14'9`, `14 ft 9 in`, `14′ 9″`, `9.5"` and a bare number as inches.
+ */
+export function parseInputText(text: string, units: DisplayUnits): number {
+  const t = text.trim().replace(',', '.');
+  if (t === '') return NaN;
+  if (units === 'metric') {
+    const v = Number(t);
+    return Number.isFinite(v) ? fromInputValue(v, units) : NaN;
+  }
+  const m = /^(-?)\s*(?:(\d+(?:\.\d+)?)\s*(?:'|′|ft)\s*)?(?:(\d+(?:\.\d+)?)\s*(?:"|″|in)?)?\s*$/i.exec(t);
+  if (!m || (m[2] === undefined && m[3] === undefined)) return NaN;
+  const inches = Number(m[2] ?? 0) * INCHES_PER_FOOT + Number(m[3] ?? 0);
+  return roundToMm(inToM(m[1] ? -inches : inches));
+}
