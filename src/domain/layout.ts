@@ -72,6 +72,8 @@ export type OverheadLayout = LayoutBase & {
   sensorBody: Box;
   /** Height of the mount plane above the floor and above the hitting surface. */
   mountHeightFromFloorM: number;
+  /** gap between the ceiling and the top of the sensor, bridged by drop rods */
+  mountDropM: number;
   mountHeightFromSurfaceM: number;
   lensFloorPoint: Vec3;
   lensToTeeM: number;
@@ -209,6 +211,7 @@ function overheadLayout(state: PlannerStateV1, spec: OverheadSpec, base: LayoutB
     sensorRotationY: 0,
     sensorBody: body,
     mountHeightFromFloorM: top,
+    mountDropM: H - top,
     mountHeightFromSurfaceM: top - base.hittingSurfaceY,
     lensFloorPoint: [lensX, base.hittingSurfaceY, lensZ],
     lensToTeeM: offset,

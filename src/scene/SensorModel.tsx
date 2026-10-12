@@ -20,6 +20,7 @@ export function SensorModel({ layout, product, onModelKind }: { layout: Layout; 
 
   return (
     <group position={position} rotation-y={rotationY}>
+      {isOverhead && layout.mountDropM > 0.005 && <DropMount drop={layout.mountDropM} width={size[0]} />}
       {url ? (
         <ModelBoundary key={url} fallback={envelope}>
           <Suspense fallback={envelope}>
@@ -29,6 +30,31 @@ export function SensorModel({ layout, product, onModelKind }: { layout: Layout; 
       ) : (
         envelope
       )}
+    </group>
+  );
+}
+
+/** Ceiling plates and threaded rods that carry the sensor when it is hung below the ceiling. */
+function DropMount({ drop, width }: { drop: number; width: number }) {
+  const xs = [-width * 0.3, width * 0.3];
+  return (
+    <group>
+      {xs.map((x) => (
+        <group key={x} position={[x, 0, 0]}>
+          <mesh position={[0, drop / 2, 0]} castShadow>
+            <cylinderGeometry args={[0.008, 0.008, drop, 12]} />
+            <meshStandardMaterial color="#8c9195" roughness={0.35} metalness={0.8} />
+          </mesh>
+          <mesh position={[0, drop - 0.004, 0]}>
+            <boxGeometry args={[0.09, 0.008, 0.09]} />
+            <meshStandardMaterial color="#cfd3d4" roughness={0.4} metalness={0.6} />
+          </mesh>
+          <mesh position={[0, 0.006, 0]}>
+            <cylinderGeometry args={[0.016, 0.016, 0.012, 16]} />
+            <meshStandardMaterial color="#5a5f62" roughness={0.4} metalness={0.7} />
+          </mesh>
+        </group>
+      ))}
     </group>
   );
 }
