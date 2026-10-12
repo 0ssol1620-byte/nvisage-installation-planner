@@ -3,6 +3,7 @@
  * enclosure depth stays one of the model's published depths and the projector zoom stays in its throw range.
  */
 import { BUFFER_MIN_IN, ENCLOSURES, PROJECTORS, enclosureById, matById, projectorById } from '../data/carls';
+import { isOverhead, PRODUCTS } from '../data/specs/products';
 import type { PlannerStateV1 } from './schema';
 import { inToM } from './units';
 
@@ -52,3 +53,36 @@ export function selectMat(s: PlannerStateV1, id: string): PlannerStateV1 {
 export const PROJECTOR_IDS = PROJECTORS.map((p) => p.id);
 
 const round3 = (v: number) => Math.round(v * 1000) / 1000;
+
+/**
+ * Drop below the ceiling that brings an overhead sensor into its mount range (whole cm), or 0 when the
+ * ceiling is already in range or too low (nothing to gain by lowering it). The sensor is hung as close
+ * to the ceiling as the range allows: the top of the sensor sits at the published maximum.
+ */
+export function autoMountDrop(s: PlannerStateV1): number {
+  const spec = PRODUCTS[s.product];
+  if (!isOverhead(spec)) return 0;
+  const excess = s.room.heightM - inToM(spec.mountHeightIn.max);
+  return excess > 1e-6 ? Math.ceil(excess * 100 - 1e-6) / 100 : 0;
+}
+
+/** Ceiling height at which an overhead sensor can be hung without a drop (both floor and hitting-surface datums). */
+export function minCeilingM(s: PlannerStateV1): number | null {
+  const spec = PRODUCTS[s.product];
+  if (!isOverhead(spec)) return null;
+  return inToM(spec.mountHeightIn.min) + (s.mat.enabled ? s.mat.heightM : 0);
+}
+
+/**
+ * Keeps the setup installable after the room, product or mat changes: the sensor drop follows the
+ * ceiling, and an enclosure that no longer fits the room is swapped for a size of the same family that does.
+ */
+export function fitToRoom(s: PlannerStateV1): PlannerStateV1 {
+  let out: PlannerStateV1 = { ...s, sensor: { ...s.sensor, mountDropM: autoMountDrop(s) } };
+  const cur = enclosureById(out.enclosure.model);
+  if (cur) {
+    const id = enclosureForFamily(out, cur.family);
+    if (id !== cur.id) out = selectEnclosure(out, id);
+  }
+  return out;
+}

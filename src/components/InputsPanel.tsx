@@ -12,14 +12,8 @@ import { useT } from '../lib/hooks';
 import { usePlanner } from '../store/plannerStore';
 import { LengthField, NumberField, Segmented, SelectField, Toggle } from './fields';
 import { SpecCard } from './SpecCard';
+import { ROOM_PRESETS as PRESETS } from '../domain/presets';
 
-/** Typical room sizes for a quick start. [W, D, H] metres. */
-const PRESETS = [
-  { id: 'garage', dims: [3.7, 6.1, 2.75] },
-  { id: 'basement', dims: [4.0, 5.2, 2.75] },
-  { id: 'bonus', dims: [4.3, 5.5, 3.05] },
-  { id: 'studio', dims: [4.9, 6.7, 3.3] },
-] as const;
 
 /** Catalog listing names with typographic marks: "4' x 9'" → "4′ × 9′". */
 export const listingLabel = (s: string) => s.replace(/ x /g, ' × ').replace(/'/g, '′');

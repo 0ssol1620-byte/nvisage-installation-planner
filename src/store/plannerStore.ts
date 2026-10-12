@@ -4,7 +4,7 @@ import type { CameraPreset, Handedness, LayerId, PlannerStateV1 } from '../domai
 import { defaultState, parseSharedState, serializeState } from '../domain/schema';
 import type { DisplayUnits } from '../domain/units';
 import type { ZoneRect } from '../domain/zone-geometry';
-import { selectEnclosure, selectMat, selectProjector } from '../domain/packages';
+import { fitToRoom, selectEnclosure, selectMat, selectProjector } from '../domain/packages';
 
 export type ShareNotice = 'loaded' | 'invalid' | null;
 
@@ -80,13 +80,13 @@ export const usePlanner = create<Store>((set) => {
         const zMax = Math.max(0.1, room.depthM - Math.min(1.2, room.depthM / 3));
         const xMax = Math.max(0, room.widthM / 2 - 0.1);
         const tee = { xM: Math.min(xMax, Math.max(-xMax, s.tee.xM)), zM: Math.min(zMax, s.tee.zM) };
-        return { ...s, room, tee: tee.xM === s.tee.xM && tee.zM === s.tee.zM ? s.tee : { xM: round2(tee.xM), zM: round2(tee.zM) } };
+        return fitToRoom({ ...s, room, tee: tee.xM === s.tee.xM && tee.zM === s.tee.zM ? s.tee : { xM: round2(tee.xM), zM: round2(tee.zM) } });
       }),
     // Keep the tee and room when switching product; only product-specific geometry changes.
-    setProduct: (product) => update((s) => ({ ...s, product })),
+    setProduct: (product) => update((s) => fitToRoom({ ...s, product })),
     setHandedness: (handedness) => update((s) => ({ ...s, handedness })),
     setTee: (patch) => update((s) => ({ ...s, tee: { ...s.tee, ...patch } })),
-    setMat: (patch) => update((s) => ({ ...s, mat: { ...s.mat, ...patch } })),
+    setMat: (patch) => update((s) => fitToRoom({ ...s, mat: { ...s.mat, ...patch } })),
     setScreen: (patch) => update((s) => ({ ...s, screen: { ...s.screen, ...patch } })),
     setMountDrop: (mountDropM) => update((s) => ({ ...s, sensor: { mountDropM } })),
     setGolfer: (patch) => update((s) => ({ ...s, golfer: { ...s.golfer, ...patch } })),
@@ -94,7 +94,7 @@ export const usePlanner = create<Store>((set) => {
     setEnclosure: (patch) => update((s) => ({ ...s, enclosure: { ...s.enclosure, ...patch } })),
     selectEnclosure: (id) => update((s) => selectEnclosure(s, id)),
     selectProjector: (id) => update((s) => selectProjector(s, id)),
-    selectMat: (id) => update((s) => selectMat(s, id)),
+    selectMat: (id) => update((s) => fitToRoom(selectMat(s, id))),
     setZone: (product, zone, patch) =>
       update((s) => {
         const z = structuredClone(s.zones);

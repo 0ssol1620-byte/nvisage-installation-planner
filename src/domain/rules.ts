@@ -227,6 +227,9 @@ function overheadChecks(state: PlannerStateV1, spec: OverheadSpec, L: OverheadLa
       below: Math.max(0, range[0] - Math.max(h, L.mountHeightFromSurfaceM)),
       above: Math.max(0, Math.min(h, L.mountHeightFromSurfaceM) - range[1]),
       surface: L.mountHeightFromSurfaceM,
+      drop: state.sensor.mountDropM,
+      // lowest ceiling that works without a drop (the mat raises the hitting surface)
+      minCeiling: range[0] + (h - L.mountHeightFromSurfaceM),
     },
     value: h, requiredRange: range, sources: [...spec.mountHeightIn.cites, ...spec.mountHeightDatum.cites],
     confidence: 'manual_drawing', datumNote: spec.mountHeightDatum.note,

@@ -112,11 +112,12 @@ export const en: Messages = {
   'check.encDepth.pass': (p, f) => `Enclosure depth ${f.len(n(p.depth))} fits the room (front edge ${f.len(n(p.total))} from the front wall).`,
   'check.encDepth.fail': (p, f) => `Enclosure front edge is ${f.len(n(p.by))} beyond the back wall. Choose a shorter depth.`,
 
-  'check.mountHeight.pass': (p, f) => `Sensor mount height is within the recommended range (${f.len(n(p.surface))} above the hitting surface).`,
+  'check.mountHeight.pass': (p, f) =>
+    `Sensor mount height is within the recommended range (${f.len(n(p.surface))} above the hitting surface${n(p.drop) > 0 ? `, hung ${f.len(n(p.drop))} below the ceiling` : ''}).`,
   'check.mountHeight.fail': (p, f) =>
     n(p.below) > 0
-      ? `Sensor mount is ${f.len(n(p.below))} below the minimum height.`
-      : `Sensor mount is ${f.len(n(p.above))} above the maximum height.`,
+      ? `The ceiling is too low for the recommended mount height (${f.len(n(p.below))} short). A ceiling of at least ${f.len(n(p.minCeiling))} is needed; for lower ceilings we recommend NEO-E.`
+      : `Sensor mount is ${f.len(n(p.above))} above the maximum height. Lower the sensor in Advanced settings.`,
   'check.mountHeight.caution': 'In range from the floor but not from the mat surface (or the reverse). Measure as shown in the installation guide.',
   'check.sensorInRoom.pass': (p, f) => `Sensor fits inside the room at the ${f.len(n(p.offset))} lens-to-tee distance.`,
   'check.sensorInRoom.failFront': (p, f) => `Sensor would sit ${f.len(n(p.by))} beyond the front wall. Move the tee further back.`,
@@ -248,10 +249,10 @@ export const en: Messages = {
   'mat.size': 'Size',
   'mat.insert': 'Hitting insert',
   'preset.title': 'Room presets',
-  'preset.garage': 'Garage bay',
-  'preset.basement': 'Basement',
-  'preset.bonus': 'Bonus room',
-  'preset.studio': 'Dedicated studio',
+  'preset.compact': 'Compact',
+  'preset.standard': 'Standard',
+  'preset.spacious': 'Spacious',
+  'preset.studio': 'Studio',
   'layer.golfer': 'Golfer',
   'layer.swingArc': 'Swing path',
   'layer.beam': 'Projector light',

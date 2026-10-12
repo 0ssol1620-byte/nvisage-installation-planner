@@ -112,9 +112,12 @@ export const ko: Messages = {
   'check.encDepth.pass': (p, f) => `인클로저 깊이 ${f.len(n(p.depth))}가 방에 들어갑니다(앞벽에서 전면 프레임까지 ${f.len(n(p.total))}).`,
   'check.encDepth.fail': (p, f) => `인클로저 전면 프레임이 뒷벽 밖으로 ${f.len(n(p.by))} 나갑니다. 더 짧은 깊이를 선택하세요.`,
 
-  'check.mountHeight.pass': (p, f) => `센서 설치 높이가 권장 범위 안에 있습니다(타격면 기준 ${f.len(n(p.surface))}).`,
+  'check.mountHeight.pass': (p, f) =>
+    `센서 설치 높이가 권장 범위 안에 있습니다(타격면 기준 ${f.len(n(p.surface))}${n(p.drop) > 0 ? `, 천장에서 ${f.len(n(p.drop))} 내려 설치` : ''}).`,
   'check.mountHeight.fail': (p, f) =>
-    n(p.below) > 0 ? `센서 설치 높이가 최소 높이보다 ${f.len(n(p.below))} 낮습니다.` : `센서 설치 높이가 최대 높이보다 ${f.len(n(p.above))} 높습니다.`,
+    n(p.below) > 0
+      ? `천장이 낮아 센서를 권장 높이에 설치할 수 없습니다(${f.len(n(p.below))} 부족). 천장 높이가 ${f.len(n(p.minCeiling))} 이상이어야 하며, 천장이 낮은 공간에는 NEO-E를 권장합니다.`
+      : `센서 설치 높이가 최대 높이보다 ${f.len(n(p.above))} 높습니다. 고급 설정에서 센서를 더 내려 설치하세요.`,
   'check.mountHeight.caution': '바닥 기준으로는 범위 안이지만 매트 표면 기준으로는 벗어납니다(또는 그 반대). 설치 가이드의 측정 방법대로 확인하세요.',
   'check.sensorInRoom.pass': (p, f) => `렌즈–티 거리 ${f.len(n(p.offset))}에서 센서가 방 안에 들어갑니다.`,
   'check.sensorInRoom.failFront': (p, f) => `센서가 앞벽 밖으로 ${f.len(n(p.by))} 벗어납니다. 티를 뒤로 옮기세요.`,
@@ -246,10 +249,10 @@ export const ko: Messages = {
   'mat.size': '크기',
   'mat.insert': '타격 인서트',
   'preset.title': '방 프리셋',
-  'preset.garage': '차고 1칸',
-  'preset.basement': '지하실',
-  'preset.bonus': '여분 방',
-  'preset.studio': '전용 스튜디오',
+  'preset.compact': '컴팩트',
+  'preset.standard': '표준',
+  'preset.spacious': '여유',
+  'preset.studio': '스튜디오',
   'layer.golfer': '골퍼',
   'layer.swingArc': '스윙 궤적',
   'layer.beam': '투사광',
