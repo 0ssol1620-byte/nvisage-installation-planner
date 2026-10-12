@@ -1,0 +1,77 @@
+path,ext,bytes,sha256,classification,publication_policy
+3D도면/G4F-1300G-M214.stp,.stp,3830601,67abf0024901f2d764ecb0361fac793e725c250d487e81efd0c91dfb1cd9bc49,CAD source (STEP),PRIVATE — never ship; public shell only after RG-02
+3D도면/LM-ES-ASSY_no-inner_parts_20250220.stp,.stp,79667696,03569e7296c131f70d4f592fe9846ece03e0b87976970ae34966568282fcebc4,CAD source (STEP),PRIVATE — never ship; public shell only after RG-02
+3D도면/N2-5000G-M100D04-30.stp,.stp,4716522,7f5dafaebb9156d94f6a755574d2c77b52a5e6be74911bd8f7fa31c569ac0e36,CAD source (STEP),PRIVATE — never ship; public shell only after RG-02
+"Brand Logos/NVISAGE Logo white,green.png",.png,11759,77636cd438b19c63ec301d526314121ac4bdaf607a72e7a31668d7b5eb858ac5,Brand logo,Official brand asset — usable in UI per brand guide
+Brand Logos/nvisage-favicon-1200w.jpg,.jpg,816504,cf79d7f1a74e8c21a5a36d2eacc8e9f3be89f218f1531fa58fe5ea4bda593d3e,Brand logo,Official brand asset — usable in UI per brand guide
+Brand Logos/nvisage-favicon-transparent-300w.png,.png,15499,37520e34bccd28b185bd1cf6563117b91b8e31c1d14b26d9971418f7d80e341c,Brand logo,Official brand asset — usable in UI per brand guide
+Brand Logos/nvisage-logo-transparent-1200w.png,.png,37052,29840e91f73558f480416205a862cd889874e5edf2d89916bc3abd4a5922dce4,Brand logo,Official brand asset — usable in UI per brand guide
+Brand Logos/nvisage-logo-transparent-300w.png,.png,7284,31515ecff2630c1d5dcb24167c058f69fd3c84859ee179cfab1bb1f5a45a991d,Brand logo,Official brand asset — usable in UI per brand guide
+"MURLIE, MURLIE-X Marketing Assets/Images/1024.png",.png,111051,6e20ebf249a0bffa5570e35718d5e5e16d3616d32bef2c19fe51c64d6d7432fc,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/1024_a.png",.png,146939,5e6399ee1ee81ffe8ba0aa3b4629eb0db058d2a1698d7f56eb6291ff1632edd9,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/Murlie Cam.png",.png,677680,6f05c805d9c865b3898aec6d7e92458a56925a3bdfae0f7b8b226ff3add13762,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/Murlie Shot History.png",.png,485174,efdae57f6098be5018fbc8f1e871b5fd5c990f949e24037f6d659de4e35cc85a,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/Murlie1.png",.png,1968854,fca2f6b625bdff6a577185971a6cfd8dbda23a7b7314d14bec2a1959e946ee09,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/Murlie2.png",.png,2562099,3f82aac4a08fe0c5bef23f1bc67bb40819fa6889049b7ce7943b04240625cd0b,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/Murlie3.png",.png,2014547,32e34070991611413f291cc514e35e9463a2418d15f26e45fdc4a03b6aa3b9a7,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/Murlie4.png",.png,2687603,c65084b7a0341f5959365dfc455783ff821683bf831670c9475bfd48ad742d8b,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/MurlieX1.png",.png,4805915,f53fea1aaadc25cd5ae7df6797f38ed8d89919fd20806177512a00b0ed46c582,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/MurlieX2.png",.png,3840125,8da1348cd09ca1b4762ebaae7e52167a88225e2d323dc0768340f2f48069955b,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/icon_murlie_x.png",.png,112180,13f9f389fa6416228a2acbb6057377ee7cef82436df707e1689513e4b6572a70,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Images/icon_murlie_x_alpha_bg.png",.png,40188,751166fe623e912c8c3e184db885b6277aea5634bc179ae1a8e2150ab05ce960,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Videos/MURLIE Impact Video.mp4",.mp4,20320061,f7f0b31605a6152982482347e0acdb23a1309efaa585cee588234a3f444ef039,Marketing video,Reseller asset — web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Videos/Murlie Introduction (Product Page).mp4",.mp4,161310096,28ce5ccf494a48e80d99ce445b0e04963126b0c815f51c97a1e8313619942802,Marketing video,Reseller asset — web use needs marketing OK
+"MURLIE, MURLIE-X Marketing Assets/Videos/MurlieX.mp4",.mp4,136289528,e743b37e4ee3c8e281a6af60125c625b02e356867d0e326e1cd548d192ac93d0,Marketing video,Reseller asset — web use needs marketing OK
+N1 Marketing Assets/N1 Marked Balls/DSC_7681 copy.jpg,.jpg,2226371,8106f88272345536a19ab724a9dfbed92fb73048ba10a0e3cdb9747199044f95,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/N1 Marked Balls/DSC_7684 copy.jpg,.jpg,3921578,ae61a2cc2e78368e51219bde091c638769ace93478554c9d634bddb68a13cc2e,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/N1 Marked Balls/DSC_7700 copy.jpg,.jpg,1987465,b01b0e6783da62cef3c296ced8d3cab376fc64b4451f5519c46b104732b6cdc3,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/N1 Marked Balls/DSC_7708 copy.jpg,.jpg,1726710,4e6ffee7d2197a5f641f2282bf25a85523159c65c955150a991e27f20230c5ca,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/N1 Marked Balls/DSC_7712 copy.jpg,.jpg,2445734,e3275eb81f86b146f3f6d55cd46a67d2e36d35a5dea7fd1226d1db5e7e1d81a2,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/N1 Marked Balls/DSC_7717 copy.jpg,.jpg,847276,e11fb5baca2d9545aff0867293103a7f155d2ca2837682392b3fa55aa73a932b,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/N1 Promo Video.mp4,.mp4,11214746,57044b4cb28fd4e53a973b872fffe60c58adb64c6fd3622808b0ff9c096d9a06,Marketing video,Reseller asset — web use needs marketing OK
+N1 Marketing Assets/NVISAGE_Front.jpg,.jpg,2402670,5a0dca5a8eeae47a828b2725a7db049144e4ef1b03a0ab70dc9f31750680a740,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/NVISAGE_Right_Side.jpg,.jpg,2719813,473423a201e61fb3eaaeba08942bf751f2fa1128bcef669fbac2a75b80ceab52,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/NVISAGE_Side.jpg,.jpg,2058461,7660b304803a573f9c560e6a55334f9977e8d1ba6063c1e4286833c0254b2d95,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/nvisage-front-angle.png,.png,31335476,b994818a5d4ce9c813c907fd2ae8bb39be4950d381a152a706228b77084df005,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/nvisage-front-top-angle.png,.png,45393950,f65a55eb8a3ff087cbabc9bc9277a49c13dd0a5b74d3b190c9b38e138a4cfe1b,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/nvisage-n1-straight.png,.png,564546,4ff1947b251923c06cffd1c71705bc9caf3f4bbda4fa68bd386657e951455ab0,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N1 Marketing Assets/nvisage-with-mounting-bracket.png,.png,5081949,c7c3ff609f0b7d000b72b44f6005c482441cc646e45dda69f79ef1da5f1ef3ec,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N2 Marketing Assets/02.N2-F.jpg,.jpg,663291,4bf419927f461bcc3297d47401529679bc5249791698229b01fae9d4fb6fb618,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N2 Marketing Assets/03.N2-B.jpg,.jpg,776339,95eafb11767456ddc5607ae72a218f0f6ef9c1793e3970928104bf9e3d5a29d1,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N2 Marketing Assets/05.N2-D.jpg,.jpg,4560510,b00878c5c4d416578b55f28b81a39bfc2e37486167c3671fd68e06f6c8739aba,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N2 Marketing Assets/06.N2-F.tif,.tif,1570732,f9c3348e871f94ae63d1f905a5b85be798b4274e26b28c8718456bcd2ce9aeb6,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N2 Marketing Assets/06.N2-PF.jpg,.jpg,855235,ddb15b2823b3b4949fca6dea4faf1345a95149e07137a627dca4c497cd3be092,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N2 Marketing Assets/07.N2-PB.png,.png,1398971,727d39d28bc020b464675210dd9e6cb7ed121209a5e4b36b791cc1cb3360a757,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N2 Marketing Assets/N2 Showroom.png,.png,2739106,34bf3f2978fe36228e35d4206a78463e5c1670ee8cc966963100f448ae89ebbf,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+N2 Marketing Assets/N2-set.png,.png,1667383,e4eac7b1bc7d5f496dbd5b3a721f1aa04747a01e6e436e55dc574c812f86d86e,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NEO-E Marketing Assets/00.NEO-E-set1.jpg,.jpg,2275054,683472ff7f77f31285e56beac1cc815c6d78fd091cf84dfe2c7211a24fd57f9d,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NEO-E Marketing Assets/00.NEO-E-set2.jpg,.jpg,604847,811a038a96f299f22b2ade6a1c6fcd349267b5f0ad03c3fed84d6a009f121a0f,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NEO-E Marketing Assets/02.NEO-E.jpg,.jpg,819316,988b6e26b6a6e9e6373058a7eea80e97eadedc19c00855d28491fc2c4476e1f8,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NEO-E Marketing Assets/03.NEO-E.jpg,.jpg,815362,32def49c2fc23e025e0c7aacd7165bb68c643bc6b0fc1b3b0c148638ac354a39,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NEO-E Marketing Assets/ImageToStl.com_01.Neo-E.png,.png,4144246,4c14531bb0bbe29f13ebd2e18f857341dced2edf25db4b348db6645f149d6f1d,"Marketing image (PNG, not a 3D file)",Reference only
+NEO-E Marketing Assets/ImageToStl.com_05.Neo-E.png,.png,4433374,8c3201547113707e487dcd4ec68e42209ab4ae4fcec33a05f6db02d68357423a,"Marketing image (PNG, not a 3D file)",Reference only
+NEO-E Marketing Assets/NEO Bag Components (2).jpg,.jpg,40602,24bbc291504bb9a6e2164c71109741cd8f852d3f6c7428beabd5178fd3973457,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NEO-E Marketing Assets/Neo-E-B.jpg,.jpg,273759,5fcbe1d856d52562749dfdec8eef02cccf2f5ac920911206c6f39ba042be8682,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NEO-E Marketing Assets/Neo-E-F.jpg,.jpg,258991,a820daa6ef31329c19693ddb802549533310888077b081ffd846056a9e27fd9c,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NEO-E Marketing Assets/neo-e_pga.png,.png,1565963,7cbab27cb91ab04a265fbffa9e0ce1f0743a167ef829320bd8bf0263b1057cec,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+NVISAGE_3D_INSTALLATION_PLANNER_MASTER_BLUEPRINT_2026-10-08_KO.md,.md,92175,7b6cea2ae2bfa460a65313e68d05ff6660fb1312608b80eda4930b45601f12a1,Planning document,Internal
+NVisage Leaflet.pdf,.pdf,10828676,5004c50ceac11c66f168bcf90bda66ec1fdda465eee8db62c50c9465a0ddcca4,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/MURLIE-X Installation Guide_V1.0_EN.pdf,.pdf,1161040,057f436e689cf12973ea37a481d7855f77be788f4ead644378ae5f8fd99f9c28,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/N1 Installation Guide_V1.0_EN.pdf,.pdf,1552904,1d776415d3b192e1ae32cddc797c53cc43cf584ffbeed0038fba712204121a52,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/N2 Installation Guide_V1.0_EN.pdf,.pdf,1274789,4e95f75b71ccb4adebbbbb243fb230715f7dd1d71ca3608e1d6ff26cf0e01fda,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/OneStop Settings Guide_N-Bridge_V1.1_KO.pdf,.pdf,1124837,ac0be1c0b907bcef28c9e25ad4665e730e4f2cea007dc01751fa1a29b356a723,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/Quick Start Guide_NEO-E_V1.4_EN.pdf,.pdf,915041,2b19e50d9b2d820f6c095814b8bbc3b88f6ad654c8ac866d809187b9d9ce62e1,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/User Manual_MURILE_V1.4_EN.pdf,.pdf,2890210,5209e4fde7b5db44327390c0d9be187a55a63b4a325849a3f641969dce6bb345,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/User Manual_N-Bridge_V1.2_EN.pdf,.pdf,1330841,99a37f6f9e962ae7097bc22f9bebbd04289d6a149816c9b05bcacb8fb19dbc4e,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/User Manual_N-Hub Lite_EN.pdf,.pdf,1740747,b203ee123704f4c8f258d47ca37ff7740acad65cfc88b646b42bcbebd305164c,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/User Manual_N1_V1.3_EN.pdf,.pdf,1183660,49267fd338502b61df90ebc3dba8c19d6831c79268996806c3df97c5eb042232,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/User Manual_N2_V1.2_EN.pdf,.pdf,1052988,248fd63fe123852d9f013c9740ea4e1012f6f49e5983b057516b0e99f4d73a9c,Official document,Cite/link; do not re-host without document owner OK
+Nvisage 공식 문서/User Manual_NEO-E_V1.6_EN.pdf,.pdf,3328969,4ac7d6b50729d2810dacda65d7c4c34dcb7a7c88402f6d7ea73da8f35afb2846,Official document,Cite/link; do not re-host without document owner OK
+Spec Sheet.xlsx,.xlsx,323897,ce442f4075ea9012534e1cec9b3381b0b71fd3adddf5873f1cdbd1706deb0e43,Sales spec sheet,Internal cross-reference only (contains pricing sheet)
+iPad&iPhone with MURLIE/02 iPhone 17 Pro 복사.png,.png,4007373,e3c490936287b8139d06e9029e6e4288f6a84bb3c4080b47161b1ca036f6b7da,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+iPad&iPhone with MURLIE/02. Ipad Mockup 1.png,.png,5565220,c222d75aa385df07676d6eb351ddb4536ec1278f4bcc329a4d33d828495a2cf2,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+iPad&iPhone with MURLIE/03 iPhone 17 Pro 복사.png,.png,4042773,3402062c4f80b92a299c7d4b0ca4530ee892e8e6578789af5464e70bbbbf4204,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+iPad&iPhone with MURLIE/04. Ipad Mockup 1.png,.png,7918590,25f2ee1c88ed6094752b1e0b86517020e58df026a9940f9c1d96cbaeb68d173d,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+iPad&iPhone with MURLIE/iPad 17 Pro.png,.png,9944840,a4261330f7c069cec37717cac2858510d137ff391445e3cb582c652c06e0d029,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+iPad&iPhone with MURLIE/iPhone & iPad.png,.png,1412261,0c8846192673cca7d47ebed912f70360fbc8f95366178d5077344739157de0db,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK
+iPad&iPhone with MURLIE/iPhone 17 Pro 2.png,.png,6880812,50cca49130e73e5b656de9103c3c2c89204e546f8e8f43dfb5993c2ab6b51fab,Marketing image,Reseller asset — lookdev/colour reference; web use needs marketing OK

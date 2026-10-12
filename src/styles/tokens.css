@@ -1,0 +1,41 @@
+/* NVISAGE planner design tokens (blueprint §7.1).
+   Brand colours are [MEASURED] from the official logo; everything else is [PROPOSED]. */
+:root {
+  --nv-brand: #d6e033;
+  --nv-graphite: #424944;
+
+  --bg: #0d1213;
+  --canvas: #111719;
+  --panel: #161d1f;
+  --panel-2: #1b2324;
+  --raise: #222b2c;
+  --line: #2b3536;
+  --line-strong: #3a4647;
+
+  --text: #f2f4f0;
+  --text-2: #b8c2be;
+  --text-3: #8a9894; /* ≥4.5:1 on --panel */
+
+  --pass: #7fd69a;
+  --caution: #f1b459;
+  --fail: #ef8a8d;
+  --unverified: #a9b6c2;
+  --neutral: #8a9894;
+
+  --basic-zone: #2ad2a0;
+  --tee-zone: #54a8ff;
+
+  --radius: 10px;
+  --radius-sm: 7px;
+  --gap: 16px;
+  --tap: 44px;
+
+  --font: 'Inter Variable', 'Pretendard Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-ko: 'Pretendard Variable', 'Inter Variable', system-ui, sans-serif;
+
+  --shadow: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 8px 24px rgb(0 0 0 / 0.25);
+  color-scheme: dark;
+}
+:root:lang(ko) {
+  --font: var(--font-ko);
+}

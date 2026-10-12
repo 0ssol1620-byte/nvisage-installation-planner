@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.venv-cad/
+source-assets-private/
+*.stp
+*.step
+*.iges
+*.igs
+*.FCStd
+.env*
+!/.env.example
+test-results/
+qa-captures/
+# third-party spec sheets are archived locally only (verify:specs reads them); not redistributed
+docs/source-evidence/carls/*.pdf
