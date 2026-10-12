@@ -10,7 +10,7 @@
 | O-05 | Approve public CAD shells (RG-02 checklist) and confirm hardware revisions | Mechanical / security | CAD_PUBLICATION_CHECKLIST |
 | O-06 | Optional: licensed realistic rigged golfer to replace the procedural mannequin (same IK data). No purchase made. | Marketing / legal | REFERENCE_COMPARISON §2 |
 | O-08 | Logo use in the public planner (MURLIE screenshot selected by the owner 2026-10-12, DL-27) | Marketing | DL-27 |
-| O-09 | Product models are publishable stand-ins built from published sizes and photos (DL-33). Replace with approved exterior models when RG-02 CAD publication is approved. | Mechanical/security | DL-33 |
+| O-09 | Public models are the CAD exterior shells approved 2026-10-12 (DL-35). Re-run `scripts/cad/publish_glb.py` when the hardware revision changes. | Mechanical | DL-35 |
 | O-10 | Robots `noindex` meta is still set in `index.html`; remove it when the planner goes live on the official site. | Web ops | DL-28 |
 | O-07 | Brand-guide confirmation for logo use and the dark UI theme | Marketing | DL-15 |
 

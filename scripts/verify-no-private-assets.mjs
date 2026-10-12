@@ -16,6 +16,9 @@ const FORBIDDEN_TEXT = [
   '7f5dafaebb9156d94f6a755574d2c77b52a5e6be74911bd8f7fa31c569ac0e36',
   '03569e7296c131f70d4f592fe9846ece03e0b87976970ae34966568282fcebc4',
 ];
+const APPROVED_MODEL = /^sensor-(n1|n2|neo-e)-[\w-]{8}\.glb$/;
+// source metadata that must have been stripped by scripts/cad/publish_glb.py
+const MODEL_FORBIDDEN = ['sourceCad', '.stp', 'previewOnly', 'G4F-1300G', 'LM-ES-ASSY', 'N2-5000G'];
 const TEXT_EXT = new Set(['.js', '.css', '.html', '.json', '.txt', '.svg', '.webmanifest']);
 
 const problems = [];
@@ -24,7 +27,13 @@ const walk = (dir) => {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) { walk(p); continue; }
     const ext = extname(name).toLowerCase();
-    if (FORBIDDEN_EXT.has(ext)) problems.push(`forbidden file type: ${relative(dist, p)}`);
+    // DL-35: only the three approved, metadata-free product models may ship
+    const approvedModel = ext === '.glb' && APPROVED_MODEL.test(name);
+    if (FORBIDDEN_EXT.has(ext) && !approvedModel) problems.push(`forbidden file type: ${relative(dist, p)}`);
+    if (approvedModel) {
+      const bin = readFileSync(p).toString('latin1');
+      for (const needle of [...FORBIDDEN_TEXT, ...MODEL_FORBIDDEN]) if (bin.includes(needle)) problems.push(`"${needle.slice(0, 24)}…" found in ${relative(dist, p)}`);
+    }
     if (TEXT_EXT.has(ext)) {
       const txt = readFileSync(p, 'utf8');
       for (const needle of FORBIDDEN_TEXT) if (txt.includes(needle)) problems.push(`"${needle.slice(0, 24)}…" found in ${relative(dist, p)}`);
@@ -36,4 +45,4 @@ if (problems.length) {
   console.error('✗ private-asset gate FAILED:\n  ' + problems.join('\n  '));
   process.exit(1);
 }
-console.log('✓ private-asset gate passed: no CAD, preview GLB, private paths or source CAD hashes in dist/');
+console.log('✓ private-asset gate passed: no CAD source, private previews, private paths or source CAD hashes in dist/ (approved product models only)');

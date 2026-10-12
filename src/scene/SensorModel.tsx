@@ -1,14 +1,14 @@
 import { Component, Suspense, useLayoutEffect, useMemo, type ReactNode } from 'react';
 import { useGLTF } from '@react-three/drei';
-import * as THREE from 'three';
 import type { Layout } from '../domain/layout';
 import type { ProductId } from '../data/specs/products';
 import { sensorModelUrl } from '../data/assets/manifest';
-import { N1Model, N2Model, NeoEModel } from './ProductModels';
+import { N1Model, N2Model, NeoEModel, useLogo } from './ProductModels';
+import { styleProductModel } from './ModelStyling';
 
 /**
- * Product model: the publishable model built from the published size and the product photos
- * (ProductModels.tsx). The private CAD preview is only used on the dev server with `?cad=1`.
+ * Product model: the approved exterior model (DL-35) finished to match the product photos
+ * (ModelStyling.ts); the built-in stand-in (ProductModels.tsx) shows while it loads or if it fails.
  */
 export function SensorModel({ layout, product, onModelKind }: { layout: Layout; product: ProductId; onModelKind?: (k: 'preview' | 'envelope') => void }) {
   const url = sensorModelUrl(product);
@@ -23,7 +23,7 @@ export function SensorModel({ layout, product, onModelKind }: { layout: Layout; 
       {url ? (
         <ModelBoundary key={url} fallback={envelope}>
           <Suspense fallback={envelope}>
-            <GlbModel url={url} onShow={() => onModelKind?.('preview')} />
+            <GlbModel url={url} product={product} onShow={() => onModelKind?.('preview')} />
           </Suspense>
         </ModelBoundary>
       ) : (
@@ -33,19 +33,14 @@ export function SensorModel({ layout, product, onModelKind }: { layout: Layout; 
   );
 }
 
-function GlbModel({ url, onShow }: { url: string; onShow: () => void }) {
+function GlbModel({ url, product, onShow }: { url: string; product: ProductId; onShow: () => void }) {
   const { scene } = useGLTF(url);
+  const logo = useLogo();
   const object = useMemo(() => {
     const clone = scene.clone(true);
-    clone.traverse((o) => {
-      const m = o as THREE.Mesh;
-      if (m.isMesh) {
-        m.castShadow = true;
-        m.receiveShadow = true;
-      }
-    });
+    styleProductModel(clone, product, logo);
     return clone;
-  }, [scene]);
+  }, [scene, product, logo]);
   useLayoutEffect(() => onShow(), [onShow, url]);
   return <primitive object={object} />;
 }

@@ -36,7 +36,7 @@ npm run verify:specs # checks every spec quote against the official PDFs (needs:
 - Estimated golfer + club + swing path (driver / 7-iron / wedge, height, L/R) with ceiling, sensor, wall, screen and projector clearance (DL-18)
 - Simulator equipment by product name: DIY / Pro / Curved enclosures at their published outer and screen sizes, HotShot mats, Standard–HC Gray screens, BenQ AK700ST / AH700ST and LG BU53RG projectors (DL-23…25, DL-29)
 - Impact screen showing the MURLIE screen (Murlie1), ceiling projector with light pyramid and shadow checks (DL-25, DL-27)
-- Product models of N1 / N2 / NEO-E built from published sizes and photos — no CAD in the build (DL-33)
+- Product models of N1 / N2 / NEO-E from the approved CAD exterior shells, finished to match the product photos (DL-35)
 - Drag the mat to move the tee; room presets; zoom / full-screen; swing playback + scrubber
 - Comparison with the GSV builder: `docs/REFERENCE_COMPARISON.md`
 

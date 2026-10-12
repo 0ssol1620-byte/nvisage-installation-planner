@@ -10,7 +10,7 @@ import logoUrl from '../assets/nvisage-logo-white-green.png';
 
 const LOGO_ASPECT = 122 / 36;
 
-function useLogo() {
+export function useLogo() {
   return useMemo(() => {
     const t = new THREE.TextureLoader().load(logoUrl);
     t.colorSpace = THREE.SRGBColorSpace;

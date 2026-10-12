@@ -17,3 +17,4 @@
 | turf texture | — | procedural canvas | code | own work | Yes | n/a | — | ✓ |
 
 Rule: anything without ✓ in "Approved" must not ship in a customer build. The build gate already blocks GLB/CAD files.
+| sensor-n1 / sensor-n2 / sensor-neo-e (`src/assets/models/*.glb`) | 2026-10-12 | NVISAGE (company CAD, exterior shell only) | `source-assets-private/preview-glb/*.preview.glb` → `scripts/cad/publish_glb.py` (metadata removed) + meshopt | Company asset | Product owner approved for public use 2026-10-12 (DL-35) | yes | private previews + build reports | ✓ owner approval |
