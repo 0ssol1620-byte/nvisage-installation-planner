@@ -71,9 +71,9 @@ export type OverheadLayout = LayoutBase & {
   sensorRotationY: number;
   sensorBody: Box;
   /** Height of the mount plane above the floor and above the hitting surface. */
+  /** floor → ceiling mount plane (top of the sensor) */
   mountHeightFromFloorM: number;
-  /** gap between the ceiling and the top of the sensor, bridged by drop rods */
-  mountDropM: number;
+  /** hitting surface (mat / swing plate top) → ceiling: the installation height that is checked */
   mountHeightFromSurfaceM: number;
   lensFloorPoint: Vec3;
   lensToTeeM: number;
@@ -169,7 +169,8 @@ export function computeLayout(state: PlannerStateV1, spec: ProductSpec): Layout 
 
 function overheadLayout(state: PlannerStateV1, spec: OverheadSpec, base: LayoutBase): OverheadLayout {
   const H = state.room.heightM;
-  const top = H - state.sensor.mountDropM;
+  // N1/N2 brackets are screwed directly to the ceiling (D10 p.9–10, D03 p.8–9): the top of the sensor is the ceiling
+  const top = H;
   const offset = inToM(spec.lensToTeeIn.value);
   // Sensor sits on the screen side of the tee (D01 p.4, D03 p.9, D10 p.10 drawings).
   const lensX = state.tee.xM;
@@ -196,8 +197,8 @@ function overheadLayout(state: PlannerStateV1, spec: OverheadSpec, base: LayoutB
 
   const dims = [...base.dimensions];
   dims.push({
-    id: 'mount-height', from: [lensX + body.size[0] / 2 + 0.08, 0, lensZ], to: [lensX + body.size[0] / 2 + 0.08, top, lensZ],
-    valueM: top, kind: 'official', labelKey: 'dim.mountHeight',
+    id: 'mount-height', from: [lensX + body.size[0] / 2 + 0.08, base.hittingSurfaceY, lensZ], to: [lensX + body.size[0] / 2 + 0.08, top, lensZ],
+    valueM: top - base.hittingSurfaceY, kind: 'official', labelKey: 'dim.mountHeight',
   });
   dims.push({
     id: 'lens-to-tee', from: [lensX, base.hittingSurfaceY + 0.004, lensZ], to: [lensX, base.hittingSurfaceY + 0.004, state.tee.zM],
@@ -211,7 +212,6 @@ function overheadLayout(state: PlannerStateV1, spec: OverheadSpec, base: LayoutB
     sensorRotationY: 0,
     sensorBody: body,
     mountHeightFromFloorM: top,
-    mountDropM: H - top,
     mountHeightFromSurfaceM: top - base.hittingSurfaceY,
     lensFloorPoint: [lensX, base.hittingSurfaceY, lensZ],
     lensToTeeM: offset,

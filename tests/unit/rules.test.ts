@@ -15,12 +15,11 @@ describe('rules engine — blueprint §14.2 boundary cases', () => {
   it('mount height just inside / outside the published N1 range', () => {
     const lo = inToM(110.24);
     const hi = inToM(118);
-    expect(mountHeightStatus(lo, lo, [lo, hi])).toBe('PASS');
-    expect(mountHeightStatus(hi, hi, [lo, hi])).toBe('PASS');
-    expect(mountHeightStatus(lo - 0.001, lo - 0.001, [lo, hi])).toBe('FAIL');
-    expect(mountHeightStatus(hi + 0.001, hi + 0.001, [lo, hi])).toBe('FAIL');
-    // floor-referenced in range, mat-surface-referenced out of range → datum-dependent
-    expect(mountHeightStatus(lo + 0.01, lo - 0.02, [lo, hi])).toBe('CAUTION');
+    // hitting surface → ceiling (DL-37)
+    expect(mountHeightStatus(lo, [lo, hi])).toBe('PASS');
+    expect(mountHeightStatus(hi, [lo, hi])).toBe('PASS');
+    expect(mountHeightStatus(lo - 0.001, [lo, hi])).toBe('FAIL');
+    expect(mountHeightStatus(hi + 0.001, [lo, hi])).toBe('FAIL');
   });
 
   it('room height drives the N1/N2 mount-height check', () => {
@@ -71,7 +70,7 @@ describe('rules engine — blueprint §14.2 boundary cases', () => {
     expect(drv).toBeLessThan(wdg);
   });
 
-  it('projector: throw beyond the back wall fails; overhead sensor in the light path is a caution', () => {
+  it('projector: throw beyond the back wall fails; a ceiling-mounted sensor clears the light path', () => {
     const s = defaultState('N2');
     s.room.depthM = 3.9; // AK700ST at 0.83 needs the lens 3.72 m from the screen
     expect(find(evaluate(s, PRODUCTS.N2).checks, 'projector-in-room').status).toBe('FAIL');
@@ -79,8 +78,6 @@ describe('rules engine — blueprint §14.2 boundary cases', () => {
     expect(find(evaluate(s, PRODUCTS.N2).checks, 'projector-in-room').status).toBe('PASS');
     const b = defaultState('N2');
     expect(find(evaluate(b, PRODUCTS.N2).checks, 'beam-sensor').status).toBe('PASS');
-    b.sensor.mountDropM = 0.3; // sensor hangs into the light path
-    expect(find(evaluate(b, PRODUCTS.N2).checks, 'beam-sensor').status).toBe('CAUTION');
   });
 
   it('projector: throw ratio outside the model zoom range is an input error', () => {

@@ -95,7 +95,7 @@ export function PlanView2D({ layout }: { layout: Layout }) {
             {layout.kind === 'overhead' && (
               <>
                 <rect x={layout.sensorBody.center[2] - layout.sensorBody.size[2] / 2} y={layout.sensorBody.center[1] - layout.sensorBody.size[1] / 2} width={layout.sensorBody.size[2]} height={layout.sensorBody.size[1]} fill="#2A3032" stroke={SCENE.brand} strokeWidth={sw} />
-                <line x1={layout.lensFloorPoint[2]} x2={layout.lensFloorPoint[2]} y1={0} y2={layout.mountHeightFromFloorM} stroke={SCENE.brand} strokeWidth={sw} strokeDasharray={`${sw * 4} ${sw * 3}`} />
+                <line x1={layout.lensFloorPoint[2]} x2={layout.lensFloorPoint[2]} y1={layout.hittingSurfaceY} y2={layout.mountHeightFromFloorM} stroke={SCENE.brand} strokeWidth={sw} strokeDasharray={`${sw * 4} ${sw * 3}`} />
               </>
             )}
             {layout.kind === 'portable' && (
@@ -114,7 +114,7 @@ export function PlanView2D({ layout }: { layout: Layout }) {
           </g>
           {layout.kind === 'overhead' && (
             <text x={layout.lensFloorPoint[2] + fsSide * 0.5} y={H / 2} fontSize={fsSide} fill={SCENE.brand} textAnchor="start" dominantBaseline="middle">
-              {t('dim.mountHeight')} {fmt.len(layout.mountHeightFromFloorM)}
+              {t('dim.mountHeight')} {fmt.len(layout.mountHeightFromSurfaceM)}
             </text>
           )}
           <text x={layout.golfer.topAt[2]} y={H - layout.golfer.topY - fsSide * 0.6} fontSize={fsSide * 0.85} fill={SCENE.warning} textAnchor="middle">

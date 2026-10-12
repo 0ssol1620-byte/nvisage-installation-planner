@@ -255,7 +255,6 @@ export function InputsPanel() {
           }}
         >
           <summary className="eyebrow">{t('panel.advanced')}</summary>
-          <LengthField label={t('field.mountDrop')} valueM={s.sensor.mountDropM} rangeM={LIMITS.mountDropM} units={u} stepM={0.01} onChange={a.setMountDrop} />
           <Toggle label={t('field.zones')} checked={s.view.layers.configZones} onChange={() => a.toggleLayer('configZones')} />
           {s.view.layers.configZones && <ZoneDesigner />}
         </details>

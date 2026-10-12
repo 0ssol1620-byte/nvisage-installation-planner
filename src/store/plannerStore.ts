@@ -15,7 +15,6 @@ type Actions = {
   setTee: (patch: Partial<PlannerStateV1['tee']>) => void;
   setMat: (patch: Partial<PlannerStateV1['mat']>) => void;
   setScreen: (patch: Partial<PlannerStateV1['screen']>) => void;
-  setMountDrop: (m: number) => void;
   setGolfer: (patch: Partial<PlannerStateV1['golfer']>) => void;
   setProjector: (patch: Partial<PlannerStateV1['projector']>) => void;
   setEnclosure: (patch: Partial<PlannerStateV1['enclosure']>) => void;
@@ -83,18 +82,17 @@ export const usePlanner = create<Store>((set) => {
         return fitToRoom({ ...s, room, tee: tee.xM === s.tee.xM && tee.zM === s.tee.zM ? s.tee : { xM: round2(tee.xM), zM: round2(tee.zM) } });
       }),
     // Keep the tee and room when switching product; only product-specific geometry changes.
-    setProduct: (product) => update((s) => fitToRoom({ ...s, product })),
+    setProduct: (product) => update((s) => ({ ...s, product })),
     setHandedness: (handedness) => update((s) => ({ ...s, handedness })),
     setTee: (patch) => update((s) => ({ ...s, tee: { ...s.tee, ...patch } })),
-    setMat: (patch) => update((s) => fitToRoom({ ...s, mat: { ...s.mat, ...patch } })),
+    setMat: (patch) => update((s) => ({ ...s, mat: { ...s.mat, ...patch } })),
     setScreen: (patch) => update((s) => ({ ...s, screen: { ...s.screen, ...patch } })),
-    setMountDrop: (mountDropM) => update((s) => ({ ...s, sensor: { mountDropM } })),
     setGolfer: (patch) => update((s) => ({ ...s, golfer: { ...s.golfer, ...patch } })),
     setProjector: (patch) => update((s) => ({ ...s, projector: { ...s.projector, ...patch } })),
     setEnclosure: (patch) => update((s) => ({ ...s, enclosure: { ...s.enclosure, ...patch } })),
     selectEnclosure: (id) => update((s) => selectEnclosure(s, id)),
     selectProjector: (id) => update((s) => selectProjector(s, id)),
-    selectMat: (id) => update((s) => fitToRoom(selectMat(s, id))),
+    selectMat: (id) => update((s) => selectMat(s, id)),
     setZone: (product, zone, patch) =>
       update((s) => {
         const z = structuredClone(s.zones);

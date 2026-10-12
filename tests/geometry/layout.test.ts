@@ -17,13 +17,13 @@ describe('world layout', () => {
     expect(L.mountHeightFromSurfaceM).toBeCloseTo(s.room.heightM - inToM(1.75), 12);
   });
 
-  it('N2 uses 39.37 in, and a mount drop lowers the mount plane', () => {
+  it('N2 uses 39.37 in and mounts directly to the ceiling', () => {
     const s = defaultState('N2');
-    s.sensor.mountDropM = 0.1;
     const L = computeLayout(s, PRODUCTS.N2);
     if (L.kind !== 'overhead') throw new Error();
     expect(s.tee.zM - L.lensFloorPoint[2]).toBeCloseTo(inToM(39.37), 12);
-    expect(L.mountHeightFromFloorM).toBeCloseTo(s.room.heightM - 0.1, 12);
+    expect(L.mountHeightFromFloorM).toBe(s.room.heightM);
+    expect(L.mountHeightFromSurfaceM).toBeCloseTo(s.room.heightM - L.hittingSurfaceY, 12);
   });
 
   it('places the published max area per the manual: side A parallel to the screen, centred on the tee', () => {

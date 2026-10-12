@@ -206,30 +206,27 @@ export function enclosureChecks(state: PlannerStateV1, enc: EncL): DomainCheck[]
 
 // --------------------------------------------------------------------------- overhead (N1/N2)
 
-export function mountHeightStatus(fromFloorM: number, fromSurfaceM: number, rangeM: [number, number]): DomainStatus {
-  const inside = (v: number) => v >= rangeM[0] - GEOMETRY_EPSILON_M && v <= rangeM[1] + GEOMETRY_EPSILON_M;
-  const a = inside(fromFloorM);
-  const b = inside(fromSurfaceM);
-  if (a && b) return 'PASS';
-  if (!a && !b) return 'FAIL';
-  return 'CAUTION'; // depends on whether the reference plane is the floor or the mat surface
+/** Installation height = hitting surface (mat / swing plate top) → ceiling (owner decision DL-37). */
+export function mountHeightStatus(fromSurfaceM: number, rangeM: [number, number]): DomainStatus {
+  return fromSurfaceM >= rangeM[0] - GEOMETRY_EPSILON_M && fromSurfaceM <= rangeM[1] + GEOMETRY_EPSILON_M ? 'PASS' : 'FAIL';
 }
 
 function overheadChecks(state: PlannerStateV1, spec: OverheadSpec, L: OverheadLayout): DomainCheck[] {
   const out: DomainCheck[] = [];
   const range: [number, number] = [inToM(spec.mountHeightIn.min), inToM(spec.mountHeightIn.max)];
-  const hStatus = mountHeightStatus(L.mountHeightFromFloorM, L.mountHeightFromSurfaceM, range);
-  const h = L.mountHeightFromFloorM;
+  const h = L.mountHeightFromSurfaceM;
+  const hStatus = mountHeightStatus(h, range);
+  const surfaceY = L.mountHeightFromFloorM - h;
   out.push({
     id: 'sensor-mount-height', category: 'sensor', status: hStatus,
     messageKey: `check.mountHeight.${hStatus.toLowerCase()}`,
     params: {
-      below: Math.max(0, range[0] - Math.max(h, L.mountHeightFromSurfaceM)),
-      above: Math.max(0, Math.min(h, L.mountHeightFromSurfaceM) - range[1]),
-      surface: L.mountHeightFromSurfaceM,
-      drop: state.sensor.mountDropM,
-      // lowest ceiling that works without a drop (the mat raises the hitting surface)
-      minCeiling: range[0] + (h - L.mountHeightFromSurfaceM),
+      below: Math.max(0, range[0] - h),
+      above: Math.max(0, h - range[1]),
+      surface: h,
+      // ceiling heights (from the floor) that put hitting surface → ceiling inside the range
+      minCeiling: range[0] + surfaceY,
+      maxCeiling: range[1] + surfaceY,
     },
     value: h, requiredRange: range, sources: [...spec.mountHeightIn.cites, ...spec.mountHeightDatum.cites],
     confidence: 'manual_drawing', datumNote: spec.mountHeightDatum.note,

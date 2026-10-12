@@ -136,7 +136,7 @@ export const PRODUCTS: Record<ProductId, ProductSpec> = {
       cites: [{ doc: 'D01', page: 4, quote: '110.24" to 118"' }, { doc: 'D10', page: 10, quote: 'approximately 118 inches' }],
     },
     mountHeightDatum: {
-      from: 'floor / calibration-board plane',
+      from: 'hitting surface (mat / swing plate top) — owner decision DL-37',
       to: 'sensor ceiling-mount plane (top of sensor)',
       status: 'MANUAL',
       note: 'In D01 p.4 and D10 p.10 the height arrow ends at the top of the sensor, not at the "Center of Camera Lens" line.',
@@ -193,7 +193,7 @@ export const PRODUCTS: Record<ProductId, ProductSpec> = {
       cites: [{ doc: 'D02', page: 4, quote: '110.24" to 118.11"' }],
     },
     mountHeightDatum: {
-      from: 'floor / tee plane',
+      from: 'hitting surface (mat / swing plate top) — owner decision DL-37',
       to: 'sensor ceiling-mount plane (top of sensor)',
       status: 'MANUAL',
       note: 'In D02 p.4 and D03 p.9 the height arrow ends at the top of the sensor, above the "Center of Camera Lens" line.',

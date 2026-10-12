@@ -29,7 +29,6 @@ export const ko: Messages = {
   'field.matW': '매트 폭',
   'field.matD': '매트 깊이',
   'field.matH': '매트 두께',
-  'field.mountDrop': '천장에서 센서까지 내림 거리',
   'field.screen': '벽부착 스크린',
   'field.screenSetback': '앞벽에서 스크린까지 거리',
   'field.screenW': '스크린 폭',
@@ -62,7 +61,7 @@ export const ko: Messages = {
   'dim.roomWidth': '방 폭',
   'dim.roomDepth': '방 깊이',
   'dim.roomHeight': '천장 높이',
-  'dim.mountHeight': '설치 높이',
+  'dim.mountHeight': '타석→천장',
   'dim.lensToTee': '렌즈 → 티',
   'dim.screenToTee': '스크린 → 티',
   'dim.footprintDepth': '설치 공간',
@@ -112,13 +111,11 @@ export const ko: Messages = {
   'check.encDepth.pass': (p, f) => `인클로저 깊이 ${f.len(n(p.depth))}가 방에 들어갑니다(앞벽에서 전면 프레임까지 ${f.len(n(p.total))}).`,
   'check.encDepth.fail': (p, f) => `인클로저 전면 프레임이 뒷벽 밖으로 ${f.len(n(p.by))} 나갑니다. 더 짧은 깊이를 선택하세요.`,
 
-  'check.mountHeight.pass': (p, f) =>
-    `센서 설치 높이가 권장 범위 안에 있습니다(타격면 기준 ${f.len(n(p.surface))}${n(p.drop) > 0 ? `, 천장에서 ${f.len(n(p.drop))} 내려 설치` : ''}).`,
+  'check.mountHeight.pass': (p, f) => `타석 면에서 천장까지 ${f.len(n(p.surface))}로 센서 설치 높이 범위 안에 있습니다.`,
   'check.mountHeight.fail': (p, f) =>
     n(p.below) > 0
-      ? `천장이 낮아 센서를 권장 높이에 설치할 수 없습니다(${f.len(n(p.below))} 부족). 천장 높이가 ${f.len(n(p.minCeiling))} 이상이어야 하며, 천장이 낮은 공간에는 NEO-E를 권장합니다.`
-      : `센서 설치 높이가 최대 높이보다 ${f.len(n(p.above))} 높습니다. 고급 설정에서 센서를 더 내려 설치하세요.`,
-  'check.mountHeight.caution': '바닥 기준으로는 범위 안이지만 매트 표면 기준으로는 벗어납니다(또는 그 반대). 설치 가이드의 측정 방법대로 확인하세요.',
+      ? `타석 면에서 천장까지 ${f.len(n(p.surface))}로 최소 설치 높이보다 ${f.len(n(p.below))} 낮습니다. 센서는 천장에 직접 설치하므로 천장 높이가 ${f.len(n(p.minCeiling))} 이상이어야 합니다. 천장이 낮은 공간에는 NEO-E를 권장합니다.`
+      : `타석 면에서 천장까지 ${f.len(n(p.surface))}로 최대 설치 높이보다 ${f.len(n(p.above))} 높습니다. 센서는 천장에 직접 설치하므로 천장 높이가 ${f.len(n(p.maxCeiling))} 이하여야 합니다. 천장 높이와 관계없이 설치할 수 있는 NEO-E도 검토해 보세요.`,
   'check.sensorInRoom.pass': (p, f) => `렌즈–티 거리 ${f.len(n(p.offset))}에서 센서가 방 안에 들어갑니다.`,
   'check.sensorInRoom.failFront': (p, f) => `센서가 앞벽 밖으로 ${f.len(n(p.by))} 벗어납니다. 티를 뒤로 옮기세요.`,
   'check.sensorInRoom.failSide': (p, f) => `센서 본체가 옆벽 밖으로 ${f.len(n(p.by))} 벗어납니다.`,
@@ -146,7 +143,7 @@ export const ko: Messages = {
   'sensor.N2': '천장형',
   'sensor.published': 'NVISAGE 매뉴얼 수치',
   'sensor.size': '본체 크기',
-  'sensor.mountRange': '설치 높이',
+  'sensor.mountRange': '타석→천장',
   'sensor.offset': '렌즈 → 티',
   'sensor.area': '최대 영역',
   'sensor.space': '설치 공간',

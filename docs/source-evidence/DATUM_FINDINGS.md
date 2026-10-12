@@ -1,5 +1,7 @@
 # Datum findings (RG-01)
 
+> **2026-10-12 owner decision (DL-37):** N1-a / N2-a — the range is measured from the hitting surface (mat / swing plate top) to the ceiling, where the bracket is screwed directly; single datum, no CAUTION.
+>
 > **2026-10-08 owner decision (DL-17): "매뉴얼 기준으로".** Every row below is now applied as `MANUAL` (manual drawing / figure basis). N1-d and N2-c use side A parallel to the screen, centred on the tee (D11 p.13 figure); NE-a/b use the D05 p.15 drawing. The table stays as the evidence trail for an optional engineering confirmation.
 
 Status vocabulary (same as `src/data/specs/products.ts`):

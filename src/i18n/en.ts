@@ -29,7 +29,6 @@ export const en: Messages = {
   'field.matW': 'Mat width',
   'field.matD': 'Mat depth',
   'field.matH': 'Mat thickness',
-  'field.mountDrop': 'Sensor drop below ceiling',
   'field.screen': 'Wall-mounted screen',
   'field.screenSetback': 'Screen distance from front wall',
   'field.screenW': 'Screen width',
@@ -62,7 +61,7 @@ export const en: Messages = {
   'dim.roomWidth': 'Room width',
   'dim.roomDepth': 'Room depth',
   'dim.roomHeight': 'Ceiling height',
-  'dim.mountHeight': 'Mount height',
+  'dim.mountHeight': 'Surface → ceiling',
   'dim.lensToTee': 'Lens → tee',
   'dim.screenToTee': 'Screen → tee',
   'dim.footprintDepth': 'Installation space',
@@ -112,13 +111,11 @@ export const en: Messages = {
   'check.encDepth.pass': (p, f) => `Enclosure depth ${f.len(n(p.depth))} fits the room (front edge ${f.len(n(p.total))} from the front wall).`,
   'check.encDepth.fail': (p, f) => `Enclosure front edge is ${f.len(n(p.by))} beyond the back wall. Choose a shorter depth.`,
 
-  'check.mountHeight.pass': (p, f) =>
-    `Sensor mount height is within the recommended range (${f.len(n(p.surface))} above the hitting surface${n(p.drop) > 0 ? `, hung ${f.len(n(p.drop))} below the ceiling` : ''}).`,
+  'check.mountHeight.pass': (p, f) => `The hitting surface is ${f.len(n(p.surface))} below the ceiling, within the sensor mount height range.`,
   'check.mountHeight.fail': (p, f) =>
     n(p.below) > 0
-      ? `The ceiling is too low for the recommended mount height (${f.len(n(p.below))} short). A ceiling of at least ${f.len(n(p.minCeiling))} is needed; for lower ceilings we recommend NEO-E.`
-      : `Sensor mount is ${f.len(n(p.above))} above the maximum height. Lower the sensor in Advanced settings.`,
-  'check.mountHeight.caution': 'In range from the floor but not from the mat surface (or the reverse). Measure as shown in the installation guide.',
+      ? `The hitting surface is ${f.len(n(p.surface))} below the ceiling, ${f.len(n(p.below))} under the minimum mount height. The sensor mounts directly to the ceiling, so the ceiling must be at least ${f.len(n(p.minCeiling))}. For lower ceilings we recommend NEO-E.`
+      : `The hitting surface is ${f.len(n(p.surface))} below the ceiling, ${f.len(n(p.above))} over the maximum mount height. The sensor mounts directly to the ceiling, so the ceiling must be at most ${f.len(n(p.maxCeiling))}. NEO-E installs at any ceiling height.`,
   'check.sensorInRoom.pass': (p, f) => `Sensor fits inside the room at the ${f.len(n(p.offset))} lens-to-tee distance.`,
   'check.sensorInRoom.failFront': (p, f) => `Sensor would sit ${f.len(n(p.by))} beyond the front wall. Move the tee further back.`,
   'check.sensorInRoom.failSide': (p, f) => `Sensor body extends ${f.len(n(p.by))} beyond a side wall.`,
@@ -146,7 +143,7 @@ export const en: Messages = {
   'sensor.N2': 'Ceiling mount',
   'sensor.published': 'NVISAGE manual values',
   'sensor.size': 'Device size',
-  'sensor.mountRange': 'Mount height',
+  'sensor.mountRange': 'Surface → ceiling',
   'sensor.offset': 'Lens → tee',
   'sensor.area': 'Max. area',
   'sensor.space': 'Installation space',

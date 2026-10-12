@@ -3,8 +3,9 @@ import { defaultState } from '../../src/domain/schema';
 import { evaluate } from '../../src/domain/rules';
 import { PRODUCTS, type ProductId } from '../../src/data/specs/products';
 import { ROOM_PRESETS } from '../../src/domain/presets';
-import { autoMountDrop } from '../../src/domain/packages';
 import { usePlanner } from '../../src/store/plannerStore';
+import { computeLayout } from '../../src/domain/layout';
+import { inToM } from '../../src/domain/units';
 
 const PRODUCT_IDS: ProductId[] = ['NEO-E', 'N1', 'N2'];
 const notPassing = (id: ProductId) =>
@@ -30,26 +31,32 @@ describe('room presets', () => {
   });
 });
 
-describe('automatic sensor drop', () => {
-  it('hangs N1 at its maximum height under a high ceiling and not at all under a low one', () => {
-    const s = defaultState('N1');
-    expect(autoMountDrop({ ...s, room: { ...s.room, heightM: 3.3 } })).toBe(0.31);
-    expect(autoMountDrop({ ...s, room: { ...s.room, heightM: 2.95 } })).toBe(0);
-    expect(autoMountDrop({ ...s, room: { ...s.room, heightM: 2.7 } })).toBe(0);
-    expect(autoMountDrop({ ...defaultState('NEO-E'), room: { ...s.room, heightM: 3.5 } })).toBe(0);
+describe('ceiling-mounted sensor height (hitting surface → ceiling)', () => {
+  const check = (id: ProductId) => evaluate(usePlanner.getState().state, PRODUCTS[id]).checks.find((x) => x.id === 'sensor-mount-height')!;
+
+  it('passes between the minimum and maximum ceiling and states both limits when it fails', () => {
+    usePlanner.setState({ state: defaultState('N1') });
+    const mat = usePlanner.getState().state.mat.heightM;
+    usePlanner.getState().setRoom({ heightM: 2.95 });
+    expect(check('N1').status).toBe('PASS');
+    expect(check('N1').params?.surface).toBeCloseTo(2.95 - mat, 3);
+
+    usePlanner.getState().setRoom({ heightM: 2.75 });
+    expect(check('N1').status).toBe('FAIL');
+    expect(check('N1').params?.minCeiling).toBeCloseTo(inToM(110.24) + mat, 3);
+
+    usePlanner.getState().setRoom({ heightM: 3.3 });
+    expect(check('N1').status).toBe('FAIL');
+    expect(check('N1').params?.maxCeiling).toBeCloseTo(inToM(118) + mat, 3);
   });
 
-  it('follows the ceiling and the product, and a too-low ceiling explains the minimum', () => {
-    usePlanner.setState({ state: defaultState('N2') });
-    usePlanner.getState().setRoom({ heightM: 3.2 });
-    expect(usePlanner.getState().state.sensor.mountDropM).toBe(0.21); // 118.11 in = 2.99999 m
-    usePlanner.getState().setProduct('NEO-E');
-    expect(usePlanner.getState().state.sensor.mountDropM).toBe(0);
-    usePlanner.getState().setProduct('N1');
-    usePlanner.getState().setRoom({ heightM: 2.75 });
-    const c = evaluate(usePlanner.getState().state, PRODUCTS.N1).checks.find((x) => x.id === 'sensor-mount-height')!;
-    expect(c.status).toBe('FAIL');
-    expect(c.params?.minCeiling).toBeCloseTo(2.8 + 0.044, 2);
+  it('the sensor stays on the ceiling for every room height', () => {
+    for (const heightM of [2.75, 2.95, 3.3]) {
+      const s = { ...defaultState('N2'), room: { ...defaultState('N2').room, heightM } };
+      const L = computeLayout(s, PRODUCTS.N2);
+      if (L.kind !== 'overhead') throw new Error();
+      expect(L.sensorAnchor[1]).toBe(heightM);
+    }
   });
 
   it('swaps an enclosure that no longer fits the room for a fitting size', () => {
