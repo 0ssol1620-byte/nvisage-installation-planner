@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { defaultState } from '../../src/domain/schema';
 import { evaluate } from '../../src/domain/rules';
 import { PRODUCTS, type ProductId } from '../../src/data/specs/products';
-import { ROOM_PRESETS } from '../../src/domain/presets';
 import { usePlanner } from '../../src/store/plannerStore';
 import { computeLayout } from '../../src/domain/layout';
 import { inToM } from '../../src/domain/units';
@@ -11,24 +10,15 @@ const PRODUCT_IDS: ProductId[] = ['NEO-E', 'N1', 'N2'];
 const notPassing = (id: ProductId) =>
   evaluate(usePlanner.getState().state, PRODUCTS[id]).checks.filter((c) => c.status !== 'PASS').map((c) => `${c.status} ${c.id}`);
 
-describe('room presets', () => {
+describe('first-load room (4.5 × 6.0 × 2.95 m)', () => {
   beforeEach(() => usePlanner.setState({ state: defaultState('N1') }));
 
-  for (const p of ROOM_PRESETS) {
-    for (const id of PRODUCT_IDS) {
-      it(`${p.id} passes every check with ${id}`, () => {
-        const [widthM, depthM, heightM] = p.dims;
-        usePlanner.getState().setProduct(id);
-        usePlanner.getState().setRoom({ widthM, depthM, heightM });
-        expect(notPassing(id)).toEqual([]);
-      });
-    }
+  for (const id of PRODUCT_IDS) {
+    it(`passes every check with ${id}`, () => {
+      usePlanner.getState().setProduct(id);
+      expect(notPassing(id)).toEqual([]);
+    });
   }
-
-  it('the first-load room is the Standard preset', () => {
-    const { room } = defaultState();
-    expect([room.widthM, room.depthM, room.heightM]).toEqual(ROOM_PRESETS.find((p) => p.id === 'standard')!.dims);
-  });
 });
 
 describe('ceiling-mounted sensor height (hitting surface → ceiling)', () => {

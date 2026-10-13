@@ -12,22 +12,11 @@ import { useT } from '../lib/hooks';
 import { usePlanner } from '../store/plannerStore';
 import { LengthField, NumberField, Segmented, SelectField, Toggle } from './fields';
 import { SpecCard } from './SpecCard';
-import { ROOM_PRESETS as PRESETS } from '../domain/presets';
-
 
 /** Catalog listing names with typographic marks: "4' x 9'" → "4′ × 9′". */
 export const listingLabel = (s: string) => s.replace(/ x /g, ' × ').replace(/'/g, '′');
 
 const FAMILIES: EnclosureFamily[] = ['DIY', 'PRO', 'CURVED'];
-
-function fmtDims(d: readonly [number, number, number], u: 'metric' | 'imperial'): string {
-  if (u === 'metric') return d.map((v) => String(Number(v.toFixed(2)))).join(' × ') + ' m';
-  return d.map((v) => {
-    const inch = Math.round(v / 0.0254);
-    const ft = Math.floor(inch / 12);
-    return inch % 12 ? `${ft}′${inch % 12}″` : `${ft}′`;
-  }).join(' × ');
-}
 
 /** Catalog values exactly as published (inches) with the converted value. */
 function EquipCard({ rows }: { rows: { k: string; v: ReactNode }[] }) {
@@ -74,25 +63,6 @@ export function InputsPanel() {
       </div>
       <section className="panel-section" aria-labelledby="sec-space">
         <h2 id="sec-space" className="eyebrow">{t('panel.space')}</h2>
-        <div className="presets" role="group" aria-label={t('preset.title')}>
-          {PRESETS.map((p) => {
-            const [W, D, H] = p.dims;
-            const on = Math.abs(s.room.widthM - W) < 1e-6 && Math.abs(s.room.depthM - D) < 1e-6 && Math.abs(s.room.heightM - H) < 1e-6;
-            return (
-              <button
-                key={p.id}
-                type="button"
-                className={`preset ${on ? 'is-on' : ''}`}
-                aria-pressed={on}
-                onClick={() => a.setRoom({ widthM: W, depthM: D, heightM: H })}
-              >
-                <span className="preset__name">{t(`preset.${p.id}`)}</span>
-                <span className="preset__dims tabular">{fmtDims(p.dims, u)}</span>
-              </button>
-            );
-          })}
-        </div>
-        <p className="note">{t('field.measureHint')}</p>
         <LengthField label={t('field.width')} valueM={s.room.widthM} rangeM={LIMITS.roomWidthM} units={u} onChange={(widthM) => a.setRoom({ widthM })} />
         <LengthField label={t('field.depth')} valueM={s.room.depthM} rangeM={LIMITS.roomDepthM} units={u} onChange={(depthM) => a.setRoom({ depthM })} />
         <LengthField label={t('field.height')} valueM={s.room.heightM} rangeM={LIMITS.roomHeightM} units={u} stepM={0.01} onChange={(heightM) => a.setRoom({ heightM })} />
