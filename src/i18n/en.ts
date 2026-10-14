@@ -28,7 +28,7 @@ export const en: Messages = {
   'field.matCustom': 'Other mat (enter size)',
   'field.matW': 'Mat width',
   'field.matD': 'Mat depth',
-  'field.matH': 'Mat thickness',
+  'field.matH': 'Mat / swing plate thickness',
   'field.screen': 'Wall-mounted screen',
   'field.screenSetback': 'Screen distance from front wall',
   'field.screenW': 'Screen width',

@@ -28,7 +28,7 @@ export const ko: Messages = {
   'field.matCustom': '기타 매트(크기 직접 입력)',
   'field.matW': '매트 폭',
   'field.matD': '매트 깊이',
-  'field.matH': '매트 두께',
+  'field.matH': '매트·스윙플레이트 두께',
   'field.screen': '벽부착 스크린',
   'field.screenSetback': '앞벽에서 스크린까지 거리',
   'field.screenW': '스크린 폭',

@@ -225,8 +225,9 @@ function overheadChecks(state: PlannerStateV1, spec: OverheadSpec, L: OverheadLa
       above: Math.max(0, h - range[1]),
       surface: h,
       // ceiling heights (from the floor) that put hitting surface → ceiling inside the range
-      minCeiling: range[0] + surfaceY,
-      maxCeiling: range[1] + surfaceY,
+      // whole millimetres inward, so the stated limit itself passes (2.9501 m must not read "2.950 m")
+      minCeiling: Math.ceil((range[0] + surfaceY) * 1000) / 1000,
+      maxCeiling: Math.floor((range[1] + surfaceY) * 1000) / 1000,
     },
     value: h, requiredRange: range, sources: [...spec.mountHeightIn.cites, ...spec.mountHeightDatum.cites],
     confidence: 'manual_drawing', datumNote: spec.mountHeightDatum.note,

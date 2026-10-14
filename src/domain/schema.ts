@@ -53,7 +53,8 @@ export const LIMITS = {
   roomDepthM: [2, 20],
   roomHeightM: [2, 6],
   matSideM: [0.3, 6],
-  matHeightM: [0, 0.15],
+  // up to raised hitting platforms: 2D swing plates are 150 mm, 3D plates and built-up stages are taller
+  matHeightM: [0, 0.4],
   mountDropM: [0, 1],
   screenSetbackM: [0, 2],
   screenWidthM: [0.5, 10],

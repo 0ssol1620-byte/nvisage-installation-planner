@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { defaultState } from '../../src/domain/schema';
+import { defaultState, validateState } from '../../src/domain/schema';
 import { evaluate } from '../../src/domain/rules';
 import { PRODUCTS, type ProductId } from '../../src/data/specs/products';
 import { usePlanner } from '../../src/store/plannerStore';
@@ -33,11 +33,29 @@ describe('ceiling-mounted sensor height (hitting surface → ceiling)', () => {
 
     usePlanner.getState().setRoom({ heightM: 2.75 });
     expect(check('N1').status).toBe('FAIL');
-    expect(check('N1').params?.minCeiling).toBeCloseTo(inToM(110.24) + mat, 3);
+    expect(check('N1').params?.minCeiling).toBe(Math.ceil((inToM(110.24) + mat) * 1000) / 1000);
 
     usePlanner.getState().setRoom({ heightM: 3.3 });
     expect(check('N1').status).toBe('FAIL');
-    expect(check('N1').params?.maxCeiling).toBeCloseTo(inToM(118) + mat, 3);
+    expect(check('N1').params?.maxCeiling).toBe(Math.floor((inToM(118) + mat) * 1000) / 1000);
+  });
+
+  it('a 150 mm swing plate raises the hitting surface and the required ceiling with it', () => {
+    usePlanner.setState({ state: defaultState('N2') });
+    usePlanner.getState().selectMat('custom');
+    usePlanner.getState().setMat({ heightM: 0.15 });
+    usePlanner.getState().setRoom({ heightM: 2.95 });
+    expect(check('N2').status).toBe('FAIL');
+    expect(check('N2').params?.minCeiling).toBe(2.951);
+    usePlanner.getState().setRoom({ heightM: 3.1 });
+    expect(check('N2').status).toBe('PASS');
+    expect(check('N2').params?.maxCeiling).toBe(3.149);
+  });
+
+  it('accepts raised hitting platforms up to 0.4 m', () => {
+    const s = defaultState('N2');
+    s.mat.heightM = 0.35;
+    expect(validateState(s)).toEqual([]);
   });
 
   it('the sensor stays on the ceiling for every room height', () => {
