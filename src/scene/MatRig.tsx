@@ -28,6 +28,7 @@ function makeTurf(base: string, light: string, seed: number): THREE.CanvasTextur
 }
 
 const SNAP = 0.01;
+const LOGO_ASPECT = 0.42 / 0.124;
 
 /**
  * Hitting mat / swing platform. Draggable in 3D and Top views: moves the tee (and everything
@@ -108,6 +109,7 @@ export function MatRig({ layout, show }: { layout: Layout; show: boolean }) {
   strip.repeat.set(sw / 0.5, sd / 0.5);
   const platform = hgt >= 0.05;
   const stanceSide = layout.golfer.frame.handed === 'right' ? -1 : 1;
+  const logoLen = Math.min(0.42, d - 0.12);
   return (
     <group position={mat.center} {...handlers}>
       {/* base / swing platform */}
@@ -124,10 +126,10 @@ export function MatRig({ layout, show }: { layout: Layout; show: boolean }) {
         <planeGeometry args={[sw, sd]} />
         <meshStandardMaterial map={strip} roughness={1} />
       </mesh>
-      {/* NVISAGE logo on the stance side */}
-      {w > 0.9 && (
-        <mesh position={[stanceSide * (w / 2 - 0.2), hgt / 2 + 0.0016, d / 2 - 0.12]} rotation-x={-Math.PI / 2} rotation-z={stanceSide > 0 ? Math.PI / 2 : -Math.PI / 2}>
-          <planeGeometry args={[0.42, 0.124]} />
+      {/* NVISAGE logo on the stance side, running along the mat and kept inside its turf (0.06 m margin) */}
+      {w > 0.9 && d > 0.6 && (
+        <mesh position={[stanceSide * (w / 2 - 0.2), hgt / 2 + 0.0016, d / 2 - 0.06 - logoLen / 2]} rotation-x={-Math.PI / 2} rotation-z={stanceSide > 0 ? Math.PI / 2 : -Math.PI / 2}>
+          <planeGeometry args={[logoLen, logoLen / LOGO_ASPECT]} />
           <meshBasicMaterial map={logo} transparent opacity={0.9} depthWrite={false} toneMapped={false} />
         </mesh>
       )}

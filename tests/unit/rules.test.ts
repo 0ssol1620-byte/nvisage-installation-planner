@@ -3,6 +3,7 @@ import { PRODUCTS, PRODUCT_ORDER } from '../../src/data/specs/products';
 import type { DomainCheck } from '../../src/domain/rules';
 import { evaluate, mountHeightStatus } from '../../src/domain/rules';
 import { defaultState } from '../../src/domain/schema';
+import { computeLayout } from '../../src/domain/layout';
 import { inToM } from '../../src/domain/units';
 
 const find = (checks: DomainCheck[], id: string): DomainCheck => {
@@ -78,6 +79,18 @@ describe('rules engine — blueprint §14.2 boundary cases', () => {
     expect(find(evaluate(s, PRODUCTS.N2).checks, 'projector-in-room').status).toBe('PASS');
     const b = defaultState('N2');
     expect(find(evaluate(b, PRODUCTS.N2).checks, 'beam-sensor').status).toBe('PASS');
+  });
+
+  it('projector: a ceiling sensor on the same spot as the projector or its mount pole fails', () => {
+    const s = defaultState('N1');
+    expect(find(evaluate(s, PRODUCTS.N1).checks, 'projector-sensor').status).toBe('PASS');
+    const L = computeLayout(s, PRODUCTS.N1);
+    if (L.kind !== 'overhead' || !L.projector) throw new Error();
+    // move the tee so the sensor sits right at the projector's depth
+    s.tee.zM += L.projector.body.center[2] - L.sensorBody.center[2];
+    const c = find(evaluate(s, PRODUCTS.N1).checks, 'projector-sensor');
+    expect(c.status).toBe('FAIL');
+    expect(evaluate(s, PRODUCTS.N1).verdict.headlineKey).toBe('verdict.conditionsNotMet');
   });
 
   it('projector: throw ratio outside the model zoom range is an input error', () => {

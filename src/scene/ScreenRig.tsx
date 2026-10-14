@@ -1,6 +1,6 @@
 import { Line } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { useEffect, useMemo } from 'react';
+import { cloneElement, useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 import type { Layout, Vec3 } from '../domain/layout';
 import type { ScreenMaterialId } from '../data/carls';
@@ -9,22 +9,52 @@ import screenUrl from '../assets/screens/murlie-screen.jpg';
 /** MURLIE software screenshot (MURLIE Marketing Assets / Murlie1.png), 1800 × 944. */
 const IMAGE_ASPECT = 1800 / 944;
 
-/** Loads once per URL without suspending the canvas; re-renders on arrival. */
-function useImageTexture(url: string) {
-  const invalidate = useThree((s) => s.invalidate);
-  return useMemo(() => {
-    const tex = new THREE.TextureLoader().load(url, () => invalidate());
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.anisotropy = 4;
-    return tex;
-  }, [url, invalidate]);
-}
+/** Projected black around the image (the projector still lights the bars, just dark). */
+const BAR = '#121415';
 
-/** Cover-fit the image onto the screen aspect (crop, never stretch). */
-function coverFit(tex: THREE.Texture, w: number, h: number) {
-  const scr = w / h;
-  tex.repeat.set(scr < IMAGE_ASPECT ? scr / IMAGE_ASPECT : 1, scr < IMAGE_ASPECT ? 1 : IMAGE_ASPECT / scr);
-  tex.offset.set((1 - tex.repeat.x) / 2, (1 - tex.repeat.y) / 2);
+/**
+ * The whole game image fitted inside the screen (contain: never cropped, never stretched), with dark
+ * bars filling the rest. Drawn into a canvas at the screen aspect so flat and curved screens map it the same way.
+ * Loads without suspending the canvas; re-renders on arrival.
+ */
+function useScreenTexture(url: string, w: number, h: number) {
+  const invalidate = useThree((s) => s.invalidate);
+  const img = useMemo(() => {
+    const i = new Image();
+    i.src = url;
+    return i;
+  }, [url]);
+  // A resized canvas needs a new texture (WebGL texture storage is fixed at first upload).
+  const aspect = Math.round((w / h) * 1000) / 1000;
+  const tex = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = aspect >= 1 ? 2048 : Math.round(2048 * aspect);
+    canvas.height = aspect >= 1 ? Math.round(2048 / aspect) : 2048;
+    const t = new THREE.CanvasTexture(canvas);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 4;
+    return t;
+  }, [aspect]);
+  useEffect(() => () => tex.dispose(), [tex]);
+  useEffect(() => {
+    const canvas = tex.image as HTMLCanvasElement;
+    const draw = () => {
+      const g = canvas.getContext('2d')!;
+      g.fillStyle = BAR;
+      g.fillRect(0, 0, canvas.width, canvas.height);
+      if (img.complete && img.naturalWidth) {
+        const k = Math.min(canvas.width / IMAGE_ASPECT, canvas.height);
+        const iw = k * IMAGE_ASPECT;
+        g.drawImage(img, (canvas.width - iw) / 2, (canvas.height - k) / 2, iw, k);
+      }
+      tex.needsUpdate = true;
+      invalidate();
+    };
+    draw();
+    img.addEventListener('load', draw);
+    return () => img.removeEventListener('load', draw);
+  }, [img, tex, invalidate]);
+  return tex;
 }
 
 /** Lit: projected image, slightly darker on the high-contrast gray fabric. Unlit: bare fabric. */
@@ -38,23 +68,19 @@ const FABRIC: Record<ScreenMaterialId, { lit: string; bare: string }> = {
 /** Impact screen (flat or curved) showing the MURLIE screen, plus the Carl's Place enclosure frame. */
 export function ScreenRig({ layout, material, showEnclosure }: { layout: Layout; material: ScreenMaterialId; showEnclosure: boolean }) {
   const scr = layout.screen;
-  const tex = useImageTexture(screenUrl);
+  const tex = useScreenTexture(screenUrl, scr?.curve?.arcM ?? scr?.widthM ?? 16, scr?.heightM ?? 9);
   const lit = !!layout.projector;
-
-  useEffect(() => {
-    if (scr) coverFit(tex, scr.widthM, scr.heightM);
-  }, [scr, tex]);
 
   if (!scr) return null;
   const fabric = FABRIC[material];
-  const face = (
-    <meshBasicMaterial map={lit ? tex : null} color={lit ? fabric.lit : fabric.bare} toneMapped={false} side={THREE.DoubleSide} />
-  );
+  // The image is projected onto the golfer's side only; from behind the screen is bare fabric.
+  const front = <meshBasicMaterial map={lit ? tex : null} color={lit ? fabric.lit : fabric.bare} toneMapped={false} side={THREE.FrontSide} />;
+  const back = <meshStandardMaterial color={fabric.bare} roughness={1} side={THREE.BackSide} />;
   const enc = layout.enclosure;
   return (
     <group>
       {scr.curve ? (
-        <CurvedScreen scr={scr} curve={scr.curve}>{face}</CurvedScreen>
+        <CurvedScreen scr={scr} curve={scr.curve} front={front} back={back} />
       ) : (
         <group position={scr.center}>
           {!enc && (
@@ -65,7 +91,11 @@ export function ScreenRig({ layout, material, showEnclosure }: { layout: Layout;
           )}
           <mesh>
             <planeGeometry args={[scr.widthM, scr.heightM]} />
-            {face}
+            {front}
+          </mesh>
+          <mesh>
+            <planeGeometry args={[scr.widthM, scr.heightM]} />
+            {back}
           </mesh>
         </group>
       )}
@@ -75,17 +105,17 @@ export function ScreenRig({ layout, material, showEnclosure }: { layout: Layout;
 }
 
 /** Circular arc through the published chord (width at projection plane) and arc length (width at curve). */
-function CurvedScreen({ scr, curve, children }: { scr: NonNullable<Layout['screen']>; curve: NonNullable<NonNullable<Layout['screen']>['curve']>; children: React.ReactNode }) {
+function CurvedScreen({ scr, curve, front, back }: { scr: NonNullable<Layout['screen']>; curve: NonNullable<NonNullable<Layout['screen']>['curve']>; front: React.ReactElement<{ side?: THREE.Side }>; back: React.ReactElement<{ side?: THREE.Side }> }) {
   const half = curve.arcM / curve.radiusM / 2;
   const r = curve.radiusM;
   // Circle centre sits in front of the screen (towards the golfer); the deepest point is the screen plane.
-  // Mirrored in X so the image reads left-to-right from inside the curve.
+  // Mirrored in X so the image reads left-to-right from inside the curve. The golfer sees the inside of the
+  // cylinder, i.e. its back faces, so the projected side and the bare side swap.
+  const geo = <cylinderGeometry args={[r, r, scr.heightM, 64, 1, true, Math.PI - half, 2 * half]} />;
   return (
     <group position={[0, scr.bottomM + scr.heightM / 2, scr.planeZ + r]} scale={[-1, 1, 1]}>
-      <mesh>
-        <cylinderGeometry args={[r, r, scr.heightM, 64, 1, true, Math.PI - half, 2 * half]} />
-        {children}
-      </mesh>
+      <mesh>{geo}{cloneElement(front, { side: THREE.BackSide })}</mesh>
+      <mesh>{geo}{cloneElement(back, { side: THREE.FrontSide })}</mesh>
     </group>
   );
 }

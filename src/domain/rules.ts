@@ -475,6 +475,28 @@ function shadowFraction(L: Layout, blocked: (o: Vec3, p: Vec3) => boolean): numb
   return hit / n;
 }
 
+/** Gap between two boxes (0 when they touch or overlap). */
+function boxGap(a: Aabb, b: Aabb): number {
+  let s = 0;
+  for (let i = 0; i < 3; i++) {
+    const d = Math.max(0, a.min[i]! - b.max[i]!, b.min[i]! - a.max[i]!);
+    s += d * d;
+  }
+  return Math.sqrt(s);
+}
+
+/** Projector body plus its drop pole up to the ceiling (ProjectorRig draws a 36 mm pole). */
+export function projectorBoxes(L: Layout): Aabb[] {
+  const P = L.projector!;
+  const body = boxOf(P.body.center, P.body.size);
+  const out = [body];
+  if (L.room.heightM - body.max[1] > 0.01) {
+    const [x, , z] = P.body.center;
+    out.push({ min: [x - 0.018, body.max[1], z - 0.018], max: [x + 0.018, L.room.heightM, z + 0.018] });
+  }
+  return out;
+}
+
 function projectorChecks(state: PlannerStateV1, L: Layout): DomainCheck[] {
   if (!L.projector) {
     return [{ id: 'projector', category: 'projector', status: 'NOT_EVALUATED', messageKey: L.screen ? 'check.projector.off' : 'check.screen.off', confidence: 'unknown' }];
@@ -496,7 +518,8 @@ function projectorChecks(state: PlannerStateV1, L: Layout): DomainCheck[] {
     sources: cite ? [cite] : undefined, confidence: 'catalog',
   });
 
-  const club = clubClearanceToBox(L.golfer.samples, body);
+  const parts = projectorBoxes(L);
+  const club = parts.map((b) => clubClearanceToBox(L.golfer.samples, b)).reduce((a, b) => (b.distance < a.distance ? b : a));
   const cs = band(club.distance);
   out.push({
     id: 'projector-club', category: 'projector', status: cs, messageKey: `check.projectorClub.${cs.toLowerCase()}`,
@@ -505,6 +528,13 @@ function projectorChecks(state: PlannerStateV1, L: Layout): DomainCheck[] {
 
   if (L.kind === 'overhead') {
     const sb = sensorBox(L);
+    // a ceiling sensor and a ceiling projector cannot share the same spot
+    const gap = Math.min(...parts.map((b) => boxGap(sb, b)));
+    const touch = gap <= GEOMETRY_EPSILON_M;
+    out.push({
+      id: 'projector-sensor', category: 'projector', status: touch ? 'FAIL' : 'PASS',
+      messageKey: touch ? 'check.projectorSensor.fail' : 'check.projectorSensor.pass', params: { margin: gap }, value: gap, confidence: 'geometric',
+    });
     const f = shadowFraction(L, (o, p) => rayHitsBox(o, p, sb));
     out.push({
       id: 'beam-sensor', category: 'projector', status: f > 0 ? 'CAUTION' : 'PASS',
